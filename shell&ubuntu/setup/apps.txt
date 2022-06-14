@@ -1,0 +1,19 @@
+# platform: wsl
+
+# list
+    1. nodejs, nvm, npm
+    2. tldr
+    3. git
+
+
+
+
+# nodejs & npm
+    #ref: https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    nvm install --lts
+
+# tldr: Collaborative cheatsheets for console commands
+    npm install -g tldr
+
+# git
