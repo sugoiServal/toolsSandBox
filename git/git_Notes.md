@@ -20,6 +20,7 @@
    - Node alias
      - HEAD: the current node you are in (master or through checkout)
      - master: the lattest version
+     - origin: common name alias to the remote url, meaning the remote repository that a project was originally cloned from. 
 
    - .gitignore: sepecify the files that will be ignored
   
@@ -27,13 +28,18 @@
    - add (staging) before commit
    - size limitation: git should have file size limitation, because blobs in each commit are actually binaries stored in the disk
 
-3. commands
-- setup
+
+## setup
+- ref: https://docs.github.com/en/get-started/quickstart/set-up-git
 ``` bash
 git config --global user.email "urEmail@gmail.com"
 git config --global user.name "urName"
+# Authenticating with GitHub from Git (HTTPS or SSH)
+ssh-keygen -t ed25519 -C "your_email@example.com"
+#   copy generated .pub key content
+#   add to:  Github->Settings(drop down)->Access(left side)->SSH and GPG keys
 ```
-- basics, info
+## basics, info
 ``` bash
 git init # creates a new git repo, with data stored in the .git directory
 git help <command>
@@ -41,18 +47,18 @@ git status # status summary
 git log, gitlog # list all history commits in DAG
 git branch -vv # list all branches in current repo
 ```
-- traverse
+## traverse
 ``` bash
 git checkout <hash> # updates HEAD to another node
 git checkout -f <hash> # force checkout, ignore all changes made to current node
 ```
-- commit
+## commit
 ``` bash
 git add <filename>  #  adds files to staging area
 git add *, git add :/  #  adds all files, everything from top level
 git commit # commit
 ```
-- branching 
+## branching 
   - we refer branch node with custom reference name <name>, usage just like 'master'
   - after a branch \<br> is made,
     - the HEAD still point to current commit
@@ -75,12 +81,58 @@ git commit # commit
 git branch <name>   # create a branch <name> from current commit
 git checkout -b <name> # creates a branch <name> and then switches to it
 ```
-- merging 
+## merging 
+  - merging status:
+    - fast-forward merging: without conflict
+    - merge conflict: auto-merge fail, need manually resolve conflicts 
+
+``` text
+        <br> ,master                   
+           /                     
+--- o <-- o                                     
+     ^      <cr>  [after merge <br> and master]
+      \     /     
+       --- o 
+
+          <br>  master                  
+           /    /                 
+--- o <-- o---o
+     ^       /          [after merge 'master'/<br> and <cr>]
+      \     v     
+       --- o _<cr> 
+```
 ``` bash
 git merge <name> # merge HEAD with lattest commit along the branch <name>
+git merge <name> -abort  # (if conflict) abort current merge
+git merge <name> -continue  #  (if conflict and resolved) continue merge 
+
 # solve merge conflict
 git diff <filename> # show changes you made to <filename>, relative  to current commit
 git diff <revision> <filename> # show changes you made to <filename>, relative to commit <revision>
+git mergetool # use a fancy tool to help resolve merge conflicts
+git rebase #TODO: https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase
+```
+
+## remote
+- ref https://www.atlassian.com/git/tutorials/syncing
+``` bash
+# Upload
+    git remote # list all remote
+    git remote add origin <url>  # add remote <url> as <REMOTENAME>:origin 
+    git remote set-url origin <newUrl>  # update origin url to <newUrl> 
+    git push  <REMOTENAME> <BRANCHNAME>  # push local branch (lattest commit) to remote (remote master)
+    git push  <REMOTENAME> <LOCAL_BRANCHNAME>:<REMOTE_BRANCHNAME> # push and change the branch name
+# Download
+    git fetch <remote> <branch> # retrieve(download) commit/branch from a remote without merge to local. You can then checkout or merge that branch
+    git pull <remote> #same as git fetch; git merge; download a node and then merge with current node 
+    git clone # download whole repository from remote
+```
+
+## Undo
+``` bash
+git commit --amend # edit a commit’s contents/message
+git reset HEAD <file> # unstage a file
+git checkout -- <file> # discard changes
 ```
 # git bottom-up
 ## snapshot model
