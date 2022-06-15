@@ -17,6 +17,10 @@
 1. element/terms:
    - ID: vanilla hash, references (HEAD, MASTER, ORIGIN, etc...)
    - repo(Repositories): combination of the storages of git object, and set of IDs. Data is stored in .git
+   - Node alias
+     - HEAD: the current node you are in (master or through checkout)
+     - master: the lattest version
+
    - .gitignore: sepecify the files that will be ignored
   
 2. common rules:
@@ -24,26 +28,60 @@
    - size limitation: git should have file size limitation, because blobs in each commit are actually binaries stored in the disk
 
 3. commands
-- basics
+- setup
 ``` bash
+git config --global user.email "urEmail@gmail.com"
+git config --global user.name "urName"
+```
+- basics, info
+``` bash
+git init # creates a new git repo, with data stored in the .git directory
 git help <command>
-git init #creates a new git repo, with data stored in the .git directory
 git status # status summary
+git log, gitlog # list all history commits in DAG
+git branch -vv # list all branches in current repo
 ```
 - traverse
 ``` bash
-git checkout <revision> # updates HEAD and current branch
-git init #creates a new git repo, with data stored in the .git directory
+git checkout <hash> # updates HEAD to another node
+git checkout -f <hash> # force checkout, ignore all changes made to current node
 ```
 - commit
 ``` bash
 git add <filename>  #  adds files to staging area
-git add *  #  adds all files 
+git add *, git add :/  #  adds all files, everything from top level
 git commit # commit
 ```
-- merging conflicts
+- branching 
+  - we refer branch node with custom reference name <name>, usage just like 'master'
+  - after a branch \<br> is made,
+    - the HEAD still point to current commit
+    - if we checkout \<br>, any new commit will be made along \<br> branch
+    - if we dont checkout \<br>, any new commit will be made along current branch (typically 'master')
+    - we can make another branch \<cr>, same logic, change will be made on \<cr> only if we checkout \<cr>
+    - now there are three branches: 'master', \<br>, \<cr>
+  -  **checkout branch won't discard change you have made to current filesystem, it is not like checkout commit**, when you commit these changes they will be made on new branch
+``` text
+    master  <br>                    
+     /      /                     
+--- o <-- o 
+     ^      <cr>    
+      \     /     
+       --- o 
+```
 
+``` bash
+# branching
+git branch <name>   # create a branch <name> from current commit
+git checkout -b <name> # creates a branch <name> and then switches to it
+```
+- merging 
+``` bash
+git merge <name>
 
+git diff <filename> # show changes you made to <filename>, relative  to current commit
+git diff <revision> <filename> # show changes you made to <filename>, relative to commit <revision>
+```
 # git bottom-up
 ## snapshot model
 ### 1)filesystem
