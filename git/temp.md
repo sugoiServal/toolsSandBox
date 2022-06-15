@@ -77,8 +77,8 @@ git checkout -b <name> # creates a branch <name> and then switches to it
 ```
 - merging 
 ``` bash
-git merge <name>
-
+git merge <name> # merge HEAD with lattest commit along the branch <name>
+# solve merge conflict
 git diff <filename> # show changes you made to <filename>, relative  to current commit
 git diff <revision> <filename> # show changes you made to <filename>, relative to commit <revision>
 ```
