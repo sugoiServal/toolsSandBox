@@ -19,5 +19,11 @@
 
 # git
 
+# tree
+
 # locate
 sudo apt install mlocate
+
+# autojump
+sudo apt install autojump
+sudo echo ". /usr/share/autojump/autojump.bash" >> ~/.bashrc && sudo source ~/.bashrc
