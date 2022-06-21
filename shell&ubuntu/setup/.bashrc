@@ -124,6 +124,9 @@ alias lm='ls -al'
 cdw(){ wspth=$(wslpath "$1"); wspth=${wspth//' '/'\ '}; eval "cd $wspth";}
 # grep: recursive (for folder); give line number; exclude binary file; ignore case; with color output
 alias grep='grep --extended-regexp  --line-number --binary-files=without-match --ignore-case --color=always'
+
+alias sed='sed -E'
+
 export EDITOR="/bin/vim"	
 
 alias gitlog='git  log --all --graph --decorate'
