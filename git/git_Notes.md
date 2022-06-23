@@ -28,6 +28,22 @@
    - add (staging) before commit
    - size limitation: git should have file size limitation, because blobs in each commit are actually binaries stored in the disk
 
+## quick cheatsheet
+``` bash
+git init
+git status
+alias gitlog='git  log --all --graph --decorate'
+alias gitadd="git add :/"
+alias gitcommit="git commit -am"
+
+git push origin master
+
+git clone <url>
+git checkout <hash>
+
+git branch <name>
+git merge <name>
+```
 
 ## setup
 - ref: https://docs.github.com/en/get-started/quickstart/set-up-git

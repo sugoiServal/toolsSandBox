@@ -4,7 +4,11 @@
     1. nodejs, nvm, npm
     2. tldr
     3. git
-    4. locate
+    4. tree
+    5. locate
+    6. autojump
+    7. gcc
+    8. 
 
 
 
@@ -27,3 +31,6 @@ sudo apt install mlocate
 # autojump
 sudo apt install autojump
 sudo echo ". /usr/share/autojump/autojump.bash" >> ~/.bashrc && sudo source ~/.bashrc
+
+# gcc
+sudo apt install gcc

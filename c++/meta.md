@@ -1,15 +1,3 @@
-# style
-- use cpplint to check the style
-- check Google Style
-
-## naming
-- google style: 
-  - name varialbe with **snake_case**
-  - name const with **kCamelCase**, "k" indicate constant
-
-
-
-
 
 
 
@@ -37,35 +25,25 @@ using namespace <nameSpace>     // exclude the need to specify namespace with na
 - local scope within {}
   - variables declared inside {} belongs to the scope
   - die in the of the their scope
+  - **unless the variable is a STL type or other libraries (that implemented with smart pointer) and there are still pointers/references that point to the variable**
 
 
 
-## 2) header files
+
+# style
+- use cpplint to check the style
+- check Google Style
+
+## naming
+- google style: 
+  - name varialbe with **snake_case**
+  - name const with **kCamelCase**, "k" indicate constant
+  - name Function in **CamelCase()**
+  - use **snake_case** for function arguments
+  - name Class in **CamelCase()**
+    - use snake_case_ with tailing "_" for private data member
 
 
-### include
-- what include do is to copy all text content inside a header file into the beginning of the current file (before the file being compiled)
-``` c++
-// two variant
-#include <file>     // system include files, search in (external system's) lib, usr/bin etc...
-#include "file"     // local include files
-```
-### what should be in header files?
-
-- header file (.h):
-  - the header file (.h) should be for 
-    - declarations of classes, structs and its methods, prototypes, 
-    - comments, documentation, explanations...
-    - inline functions and their definitions 
-  - header functions as I/O interface: as "library" or "package", either native to c++ or installed elsewhere
-  - user can just: include the header; lookup the utilities and usage; use the utilities. No need to worry about implementation 
-``` c++
-system.h          // declarations of classes, structs and its methods that pertain to system 
-system.cpp        // implement methods of those declared in system.h
-```
-- .hpp
-  - so-called header files that contain source code, essentially .h + .cpp
-  - store components of code that are commonly reused across one or more project (var, const, functions...)
 
  
 
@@ -73,7 +51,22 @@ system.cpp        // implement methods of those declared in system.h
 # tips
 ## design
 - declare everything "const" unless it must to be changed
-  - especially for pointer and reference types
-
+  - especially for pointer and reference types, Don't want the content pointed to being manipulated by random code.
+  - use const reference (const Type&) as function arguments
+- function:
+  - a function should do only one thing, not multiple. 
+  - use const reference (const Type&) as function arguments
+  - Default arguments,
+    -  avoid, only use them when readability gets much better
+    -  always set in declaration instead of definition
+- struct: 
+  - struct is a class where everything is public. 
+  - Use struct as a simple data container. 
+  - If a struct needs a function it should be a class instead.
+- class:
+  - all data must be **private**. Public interface is the only way from outside to manipulate the data
+  - data member should be set in the constructor,  AVOID setter
+  - if data need cleanup (eg, memory allocated with new), do it in the Destructor
+  - mark all functions with **const correctness** (fun() const;), unless its function is to change the state of the object 
 ## debugging
 - read error from the top
