@@ -8,7 +8,8 @@
     5. locate
     6. autojump
     7. gcc
-    8. 
+    8. cmake
+    9. Anaconda
 
 
 
