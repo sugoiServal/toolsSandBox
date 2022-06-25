@@ -12,7 +12,8 @@
     9. Anaconda
 
 
-
+# do this first
+sudo apt update
 
 # nodejs & npm
     #ref: https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl
