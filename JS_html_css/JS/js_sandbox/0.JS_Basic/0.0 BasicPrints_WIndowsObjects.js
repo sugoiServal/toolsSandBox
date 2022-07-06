@@ -78,7 +78,3 @@
         val = window.navigator.language;
     }
 
-
-//? misc:
-    //! What is Node.js:
-        // it's a javascript runtime environment. just like the browser chrome, it's also an javascript runtime environment
