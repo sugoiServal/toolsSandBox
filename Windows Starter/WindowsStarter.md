@@ -23,7 +23,7 @@
 |potPlayer|video player|
 |OBS Studio|multimedia Recorder|
 |snipaste|(alt ctrl a) snip tool|
-
+|Capture2Text|OCR Tool|
 # zip
 |Tools|Description|
 |--|--|
