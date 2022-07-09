@@ -16,15 +16,7 @@ global.<TAB>
 |global object|description|
 |--|--|
 |setInterval|run function every X seconds|
+|clearInterval|Cancels a Timeout object created by setInterval().|
 |setTimeout|run function after X seconds|
+|clearTimeout|Cancels a Timeout object created by setTimeout().|
 
-
-|REPL|description|
-|--|--|
-|||
-|||
-|||
-|||
-|||
-|||
-|||
