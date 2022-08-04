@@ -13,3 +13,9 @@ Netsh wlan show profile name=<Wi-Fi-name> key=clear
 - set Keyboard shortcut to call Up:
   -  (some app offer toogle window shortcut in setting)
   -  or: xxx-Shortcut => \<right-click> => properties => Shortcut => Shortcut key:
+
+
+# wsl DNS not working
+- shell 
+  - wsl --shutdown
+- restart Ubuntu

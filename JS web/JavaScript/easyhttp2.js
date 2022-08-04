@@ -56,7 +56,6 @@
       .catch(err => reject(err));
     });
   }
-
  }
 
  

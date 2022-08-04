@@ -47,6 +47,11 @@
                 });
                 console.log(val);
 
+    // ! spread syntax
+        // spread "..." decomposite an Array into its elements
+        mArray = [0, 1, 2, 3]
+        newArray = [...mArray, 4] // equal to [0, 1, 2, 3, 4]   
+                                  // where ...mArray is "0, 1, 2, 3"
 
     // ! Find or subarray by rule
         // a rule

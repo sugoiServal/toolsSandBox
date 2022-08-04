@@ -2,6 +2,9 @@
 
 # list
     1. nodejs, nvm, npm
+       1. nodemon | live node server
+       2. lodash
+       3. express
     2. tldr
     3. git
     4. tree
@@ -9,7 +12,8 @@
     6. autojump
     7. gcc
     8. cmake
-    9. Anaconda
+    9.  Anaconda
+    10. unzip
 
 
 # do this first

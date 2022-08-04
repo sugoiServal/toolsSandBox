@@ -4,7 +4,7 @@
 |todoist|toggle|alt+q|
 ||add task|q|
 |Everything|toggle|alt+e|
-|Snipaste|prtScreen|ctrl+alt+A|
+|Snipaste|prtScreen|alt+ctrl+a|
 |terminal|Run|alt+ctrl+w|
 |vscode|Run|alt+ctrl+v|
 |chrome|Run|alt+ctrl+e|

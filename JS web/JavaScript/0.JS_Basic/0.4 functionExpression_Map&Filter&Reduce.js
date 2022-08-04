@@ -88,7 +88,7 @@
         //Source: https://medium.com/poka-techblog/simplify-your-javascript-use-map-reduce-and-filter-bd02c593cc2d
     
     //! .map Example:
-        //? an compound object => another compound object with item being processed
+        //? an compound object => another compound object with item being processed (pipelined)
         // What you have
         var officers = [
             { id: 20, name: 'Captain Piett' },
