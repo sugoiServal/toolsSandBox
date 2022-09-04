@@ -33,3 +33,5 @@ export default Title({maiin_title, subtitle}) {
 ```
 
 - every components must be contained in a single \<div>, but using fragment can escape that
+
+- when to add cleaning up function in Hooks: whenever a hook is asynchronous, and the hook will be used to update components (inside an component)

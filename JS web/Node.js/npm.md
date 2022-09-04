@@ -21,3 +21,5 @@ npm install -g <package># install globally to system dir
 |mongoose|mongodb object modeling, supports both promises and callbacks.|
 |morgan|HTTP request logger|
 |[json-server](https://www.npmjs.com/package/json-server)|a full fake REST API from json files|
+|date-fns | does time and date related calculation |
+|[dotenv](https://www.npmjs.com/package/dotenv) |  loads environment variables from a .env file into process.env. Storing configuration in the environment separate from code |

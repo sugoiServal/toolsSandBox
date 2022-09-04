@@ -74,6 +74,9 @@
     // Append link into li
     li.appendChild(link);
 
+    // insert as nth child
+    li.insertBefore(newElement, li.children[2]);
+
     // Append li as child to ul
     document.querySelector('ul.collection').appendChild(li);
 

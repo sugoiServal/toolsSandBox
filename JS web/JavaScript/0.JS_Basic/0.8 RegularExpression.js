@@ -9,7 +9,7 @@
     let re;
     re = /hello/;
     re = /hello/i; // i =  case insensitive
-
+    re = new RegExp('foo', 'i');
 
 // properties
     re.source;  //re.source, the expression ('hello') //
@@ -33,6 +33,6 @@
         const newStr = str.replace(re, 'Hi');
 
     // search() - partial functions, Returns index of the first match, if not found retuns -1
-        string to match'.search(re);
+        'string to match'.search(re);
 
-    
+

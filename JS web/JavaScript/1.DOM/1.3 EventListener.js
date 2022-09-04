@@ -51,6 +51,7 @@
 //? Event Bubbling & Delegation
     //* EVENT BUBBLING
       //! what is it: set event listeners to parents(multiple level) of an element, when the element is triggered, all parents' events will also be triggered, thus the event 'bubble up' the DOM tree
+      // ! sometimes this is what you want to avoid: we don't want to trigger parent's evernt, but only want child's event ==> we can EVENT DELGATION  
 
       // EXAMPLE:
           // the element that is actually trigger

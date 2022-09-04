@@ -19,6 +19,7 @@
 |morgan|HTTP request logger|3rd-party|
 |express.static|change statics files' accessability from frontend| express 
 |express.urlencoded([options])|parses incoming requests with urlencoded payloads and is based on body-parser.|express|
+|express.json()|It parses incoming requests with JSON payloads. A new body object containing the parsed data is populated on the request object after the middleware (i.e. **req.body**), or an empty object ({}) if there was no body to parse |express|
 ## build a server with Express
 ```js
 // the whole chunk of app.get() is actually a switch structure. if any of the get()  got triggered and responses to the client, the express server program stop executing the following codes
