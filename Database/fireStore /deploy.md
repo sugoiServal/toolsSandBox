@@ -9,7 +9,6 @@ firebase deploy
 
 ```bash
 # (if require build) 
-npm build
+npm run build
 firebase deploy
-
 ```
