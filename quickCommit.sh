@@ -3,6 +3,6 @@ git add :/
 
 d=$(date)
 git commit -am "$d"
-git push origin master
+git push Origin master
 
 
