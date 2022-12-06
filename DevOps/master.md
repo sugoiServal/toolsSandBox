@@ -25,6 +25,7 @@ images are made up of several layers
   - use [dockerhub](https://hub.docker.com/search?q=) to find and download docker parent images
 - application specific env, source codes, commands, etc will be packed above parent image, using dockerfile, to make the final image
 ### dockerfile
+- see https://www.youtube.com/watch?v=G07FcRhYB2c&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=5
 - see project docker-crash-course
 ### image version tag:
 - all imagination can be used in combination with a tag(string, number, etc) to specify distribution/version etc

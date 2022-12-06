@@ -1,7 +1,7 @@
 # dictionaries
 
 
-|Tools|Description|
+|Tools|Descripton|
 |--|--|
 |Tagaini Jisho|Japanese Dict|
 |Lingoes|general dictionary||
@@ -12,7 +12,8 @@
 |--|--|
 |sougo|中文输入|
 |Google 日本語入力|日本語输入|
-|设定快捷键 shift+alt+1/2/3|
+|[设定快捷键](https://www.digitalcitizen.life/keyboard-language-shortcut/) shift+alt+1/2/3|advanced keyboard setting => input language hot keys|
+|设定 voice input win+h|
 
 
 # utility
@@ -22,7 +23,7 @@
 |foobar200 Asion|music player|
 |potPlayer|video player|
 |OBS Studio|multimedia Recorder|
-|snipaste|(alt ctrl a) snip tool|
+|snipaste|(alt shift a) snip tool|
 |Capture2Text|OCR Tool|
 # zip
 |Tools|Description|

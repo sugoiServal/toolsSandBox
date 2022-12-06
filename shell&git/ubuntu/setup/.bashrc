@@ -134,9 +134,7 @@ alias codecd='pwd | xargs code'
 . /usr/share/autojump/autojump.bash
 
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 alias gitadd="git add :/"
 alias gitcommit="git commit -am"
+alias gpush="git push origin master"
+alias gignore="git rm -r --cached . && git add . && git commit -m 'Untrack files in .gitignore'"
