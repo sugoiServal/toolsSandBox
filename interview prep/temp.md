@@ -1,0 +1,15 @@
+# job interview prep
+- analysis the job:
+  - job description:
+    - list of skill/ knowledge
+    - profession/personal quality required
+  - research the company
+    - For expecting the questions and also prepare for question about company
+    - find out review about whether the work culture suit me
+- practice interview
+  - practice answering interview questions
+  - practice interview etiquette:
+    - greeting, speak politely, pleasantly an enthusiastically
+    - body language, eye contact
+    - pay attention to listen
+  - practice improvisation and take the time, if I need to, to compose appropriate answer
