@@ -35,8 +35,12 @@
 
 ## Redis scaling bottleneck [link](https://youtu.be/OqCK95AS-YE?t=755)
 - how would you do if you want to scale Redis
+### clustering
+- primary for write, multiple replica(copy of primary instance) for read
+- distribute Redis to different nodes
 ### sharding
-
+- Divide the whole data set into small chunk of shards each contains a small subset of the data
+- scale database horizontally
 
 
 <hr>

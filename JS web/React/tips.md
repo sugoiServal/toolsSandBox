@@ -1,3 +1,14 @@
+# MISC
+```js
+&nbsp   //Nbsp stands for non-breaking space, meaning that strings separated with this entity will not be separated and put into separate lines.
+// eg
+<p>
+    Get started by editing&nbsp;
+    <code className={styles.code}>pages/index.tsx</code>
+</p>
+```
+
+# TIPS
 - react components start with Captial letter
 - when updating a state require accessing the state's current value, do not access the state directly. Instead use a callback to access the state. This avoid bugs caused by asynchrouous accessing the state
 ```js
