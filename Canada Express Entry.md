@@ -7,6 +7,14 @@
 - Getting above the score barrier [EE](#score-barrier-2022), [PNP](#pnp) ((CRS, Comprehensive ranking system)) => getting invitation to apply
 - [Arranging Documents](#arranging-documents) and submitting application (in 60 days after the invitation)
 
+# 入池[link](https://www.nirvanavisa.com/single-post/express-entry-work-experience)
+
+
+- either CEC or FSW
+  - `CEC: 一年非连续 CA工作经验`
+  - FSW：过去十年，一年连续，非Ca经验
+- both exclude coop
+
 
 # get the CRS
 ## Express Entry: CRS爬天梯

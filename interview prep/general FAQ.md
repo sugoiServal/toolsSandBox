@@ -1,9 +1,21 @@
 1- Could you tell us a bit of yourself ? (2,30)
 > keep it relevant to job position and talk maximum 3 minutes.
+
 - you can call me Evan
-- i am a computer science master graduated from University of ottawa last year
-- I've been coding in C++ and python back in my undergrad, and has been doing web developments for over a year focusing on nodejs with react framework work. I've done dozens of small projects in either frontend or full-stack and each time I find some new technology is I have not yet used before and And trying to learn it and apply it to these projects. I must say I'm still actively learning in this field especially interested in the cloud computing this year.
-- besides web, I also have some experience in machine learning I have quite some experience in preparing data and pipe them into some kind of statistical or machine learning algorithms, drawing graph or chart for comparison stuff like that. I did internship in the National Research Council, That one is about deep learning application and is a mainly researching project.
+- i am a computer science master graduated from University of ottawa last year, 
+- I've been coding in C++ and python and some java since my undergrad, 
+- durning the grad school, I write python script to run Deep learning and machine learning experiments and ploting most of the time, also did an modern C++ computer vision graduation project.
+
+- I been learning web developments for one and a half years after finishing the grad project. 
+- current my stack focus on the nodejs ecosystem, i'm also interested in learning Java or python backend ecosystem. i'd say that I'm comfortable right now writing back APIs, front end UI with react, using web services, database CURD, etc 
+
+i've learned the concept and tools in devOps and have used some of them in my own projects. unfortunately I haven't had any chance to be a part of any real developing team so I'm desperately want to have some first hand experience on the modern SDE workflow.
+
+
+
+- I'd say I'm still actively learning in this field And growing at fast pace. I just started to prepare for an entry level AWS certification test.
+
+- besides web, I also have some experience in machine learning and statistics, data wrangling, Deep learning research, academic writing, applying machine learnign or statistical models and data and model visualization. 
 
 
 ● Why did you apply for this position? / Why should we hire you? ...etc.
@@ -15,6 +27,7 @@
 
 - 热情和潜力
   - fast learning 
+  - 
   - some experiences but believe it is only on the surface: user layer. 
     - too many tools are their
     - under the hood, how their pro/cons in reality, whther to choose etc.
@@ -54,10 +67,11 @@
 
 
 ● What’s your weakness?
-work from home => office
-no work place social/ lack of mentor/ self-control and energy management throughout the day
-I am trying to establish a better sleep and work-life schedules, but actually work in a work place will def help a lot.
+communication,
 
+good a planing and operating tasks.
+brainstroming, scratch, recording, 
+displinary 
 
 ● How do you see/expect yourself in 3-5 years?
 描述未来职业的规划和目标，这个规划最好符合公司方面的利益，可以说希望在特定方向/领域/
