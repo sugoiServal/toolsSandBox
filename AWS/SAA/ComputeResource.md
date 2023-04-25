@@ -250,4 +250,89 @@
 
 
 # Containers: ECS, ECR, EKS
+## ECR
+- Store and manage Docker images on AWS
+    - misc
+        - `Access ECR image` through `ECS IAM role` (if permission errors => check policy)
+        - `Private`/ `Public` image (Amazon ECRPublic Gallery)
+        -  backed by Amazon S3
+        - image vulnerability scanning,
+        - versioning, image tags, image lifecycle
+   
+
 ## ECS
+- launch container as `ECS Task` (`Task Definition` = image, Launch type, ALB config...)
+    - EC2 Launch Type
+        - task run on provisioned EC2 instances
+        - Each EC2 Instance run `ECS Agent` to register itself as `ECS Task` in a `ECS Cluster`. 
+        - use `ECS service` to `starting / stopping containers`
+    - `Fargate` Launch Type (`serverless`)
+        - no provision/management, just create task with image(task definition)
+        - To `scale`, just `increase the number of tasks` (abstracted infrastructure)
+
+- IAM Roles for ECS:
+     - each `task` can have its own `IAM role` to `access different AWS resource`
+    - `Task IAM Role` is defined in the `Task Definition`
+
+## EKS
+- launch `Kubernetes clusters` in AWS 
+    - kubernetes: open-source container management = ECS function
+    - Kubernetes is `cloud-agnostic`
+    - usage: migrate existing `Kubernetes` to AWS
+    - deployment:
+        - EC2 nodes
+            - `Managed Node Groups`: EKS Creates and manages EC2 Nodes 
+            - `Self-Managed Nodes`: You create EC2 and register it to EKS cluster
+        - `Fargate` serverless: no need to manage node
+    - misc:
+        - Collect logs and metrics using `CloudWatch Container Insights`
+- EKS storage - Data Volumes 
+    - Leverages a `Container Storage Interface (CSI)` compliant `driver` to add storage to EKS
+    - support: EBS, EFS, FSx
+
+
+## AWS App Runner
+
+
+## Container Services Architectures
+### ECS + EFS
+- `EFS` can be mount to `both EC2 and Fargate launch types`
+    - `Fargate + EFS = Serverless`
+    - Use cases: persistent multi-AZ shared storage for containers
+![](https://imgur.com/qMW5Uu8.jpg)
+### ECS Load Balancer Integration
+- Able to `use ALB/NLB in front of ECS Tasks`, just like in front of EC2 instances
+    - ALB: works for most use cases
+    - NLB: 
+        - `high throughput / high performance` use cases
+        -  pair it with `AWS Private Link`
+![](https://imgur.com/qQPpWnp.jpg)
+
+### ECS Service `Auto Scaling`
+- Fargate:
+    - Automatically increase/decrease the desired `number of ECS tasks`
+    - `ECS Auto Scaling` uses `AWS Application Auto Scaling(task level)` , it is different from EC2 Auto Scaling (user don't see the infrastructure)
+        - scale on Average `CPU` Utilization
+        - scale on Average `Memory` Utilization
+        - scale on `Request from ALB`
+    - scaling strategies:
+        - `Target Tracking` – scale based on CloudWatch metric target value
+        - `Step Scaling` - CloudWatch Alarm evnet triggered
+        - `Scheduled Scaling`: time based
+- EC2 launch type
+    - `use AGS`:
+        - eg, EC2 instance CPU utilization
+    - or use `ECS Cluster Capacity Provider`
+        - Used to `automatically scale the infrastructure` for your `ECS Tasks`
+        - work with AGS, but higher level(user don't see ASG)
+        - scale based on `capacity (CPU, RAM… etc)`
+### ECS patterns
+- Event Bridge Event triggered ECS tasks
+![](https://imgur.com/idBwHfZ.jpg)
+
+- Event Bridge Schedule triggered ECS tasks
+![](https://imgur.com/39RD1MW.jpg)
+
+- ECS + SQS Queue
+    - similar to poll from EC2 instance, but it is ECS task 
+![](https://imgur.com/4sAXLxL.jpg)

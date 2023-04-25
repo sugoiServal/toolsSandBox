@@ -53,6 +53,9 @@
     - `Partition datasets in S3` for easy querying
     - Use `larger files` for quicker scan
 
+- DynamoDB Accelerator (DAX)
+    -  `in-memory cache` for DynamoDB, increase `read performance`, no API change
+    - for DynamoDB, use DAX instead of ElastiCache
     
 # Architected `Security`
 ### ELB + EC2 `security group`
@@ -185,17 +188,32 @@
 - Monitor API calls using `CloudTrail`
 
 # Architected `High availability`
-### RDS
-- RDS multi-AZ/multi-region `Read Replicas` (`ASYNC` replication)
-- `Multi-AZ RDS` (Master/Standby, immediately `SYNC`)
-    - one DNS access, automatically `DNS failover`
-### Aurora
-- Aurora is availability by default (1 writing master + 5 standby in 3 AZs)
-- Aurora Global Database: for `multi-region disaster recovery`
-    - `cross-region replication in 1 second`
-### Route 53
-- use Failover DNS policy:
-    - return `primary resource if it passed the DNS Health Check`, `otherwise return the Secondary`(Disaster Recovery/Standby) resource
+- RDS
+    - RDS multi-AZ/multi-region `Read Replicas` (`ASYNC` replication)
+    - `Multi-AZ RDS` (Master/Standby, immediately `SYNC`)
+        - one DNS access, automatically `DNS failover`
+- Aurora
+    - Aurora is availability by default (1 writing master + 5 standby in 3 AZs)
+    - Aurora Global Database: for `multi-region disaster recovery`
+        - `cross-region replication in 1 second`
+- Route 53
+    - use Failover DNS policy:
+        - return `primary resource if it passed the DNS Health Check`, `otherwise return the Secondary`(Disaster Recovery/Standby) resource
+
+- DynamoDB Global Tables 
+    - tables replicated to `multiple regions`
+    - `Active-Active` replication (two-way replication, (`READ/WREITE in any place`))
+    - usage: reduce latency in multiple regions 
+    - misc
+        -` Must enable DynamoDB Streams` as a pre-requisite
+
+- DynamoDB data TTL
+    - Allow automatically `delete items after TTL`
+    - Use cases: 
+        - reduce stored data by keeping only current items, 
+        - adhere to regulatory obligations
+        - `web session`
+
 # Common Architecte
 ### ELB Health Checks + ASG: replace unhealthy instances
 - Configured the ASG to `use ALB Health Checks`, ASG will `terminate` unhealthy instance `detected by ELB Health Checks`

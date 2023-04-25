@@ -16,6 +16,14 @@
         - Manual/Automated snapshot 
         - can `automatically copy snapshots to another AWS Region`
         - incremental (only what has changed is saved)
+- DynamoDB
+    - `Continuous` backups using `point-in-time recovery (PITR)` (any time in 35 days windows)
+    - `On-demand` backups
+        - manual full-backup: `long-term retention `
+        - configured and managed in AWS Backup 
+
+
+
 
 # Migration, transfer 
 - Migration `EBS` (across AZ/region)

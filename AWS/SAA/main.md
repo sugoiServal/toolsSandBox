@@ -2326,8 +2326,7 @@ ALARM --state-reason "testing purposes"
     - support: ECS, Fargate, EKS, Kubernetes on EC2
     - under the hood: for EKS and Kubernete, using a `containerized version of the CloudWatch Agent` to discover containers
 ### CloudWatch Lambda Insights
-- Monitoring and troubleshooting
-for `serverless applications running on AWS Lambda`
+- Monitoring and troubleshooting for `serverless applications running on AWS Lambda`
     - `system metrics`: CPU time, memory, disk, and network
     - `diagnostic information` such as cold starts and Lambda worker shutdowns
 ### CloudWatch Contributor Insights
@@ -2408,7 +2407,7 @@ for `serverless applications running on AWS Lambda`
 ### Remediations & Notifications
 - Remediations 
     - You can setup `automate remediation` of non-compliant resources using `SSM Automation Documents`
-    - can set `Remediation Retries` (retry) if first attemp is not successful
+    - can setup `Remediation Retries` (retry) if first attemp is not successful
     ![](https://imgur.com/OZgZmpc.jpg)
 - notification
     - can `trigger SNS/SQS notifications` when `resources are noncompliant`
@@ -2476,6 +2475,8 @@ for `serverless applications running on AWS Lambda`
     - `Attribute-Based Access Control (ABAC)`
         - Fine-grained permissions based on users’ attributes stored in IAM Identity Center Identity Store
         - Use case: Define permissions once, then modify AWS access by `changing the attributes (eg, Junior senior...)`
+
+        
 ## AWS Directory Services
 - Microsoft Active Directory (AD)
     - `Database` of objects: UserAccounts, Computers, Printers, File Shares, Security Groups

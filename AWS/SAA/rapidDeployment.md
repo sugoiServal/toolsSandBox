@@ -16,3 +16,10 @@
 - Deployment
     - dev: can use `Single Instance`
     - Prod: good to use High Availability with Load Balancer (ELB, ASG, multi-AZ)
+
+
+# AWS App Runner
+- deploy `code` or `container image` at scale without worry about infrastructure (web applications and APIs)
+    - No infrastructure experience required
+    - ASG, highly available, ELB, encryption, VPC, Database...
+    - Use cases: web apps, APIs, microservices, `rapid production deployments `
