@@ -4,9 +4,13 @@
 - CloudFront: DNS
 - Aurora: Aurora Endpoints (DNS)
 - RDS Proxy: (pool client access) only private connection from VPC
-
+- Global Accelerator:  provides two static anycast IP addresses
+that act as a fixed entry point to your application endpoints in a single or multiple AWS Regions, 
 
 # Solutions
+
+### Blue/green deployment 
+- it is a technique for releasing applications by shifting traffic between two identical environments running different versions of the application: "Blue" is the currently running version and "green" the new version. This type of deployment allows you to test features in the green environment without impacting the currently running version of your application. When you’re satisfied that the green version is working properly, you can gradually reroute the traffic from the old blue environment to the new green environment. 
 ### static public IP
 - Elastic IP
 - NLB - Network Load Balancer, has one `static IP per AZ`
@@ -123,8 +127,8 @@
 - AWS services: IAM Role
 - `S3 Resource-Based`
     - `Bucket Policies` – bucket level access
-        - control `public Internet access`
-        - control `Cross Account access`
+        - control public Internet access
+        - control `Cross Account access!!!!`
         - force object enctyption
     - `Object Access Control List (ACL)` – object level access
     - `Bucket Access Control List (ACL)` - less common, use `Bucket Policies` instead 

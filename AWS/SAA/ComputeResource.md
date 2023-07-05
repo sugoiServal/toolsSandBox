@@ -12,6 +12,8 @@
     - effect outside any EC2 instance
     - default: in blocked, out allowed
 - Bootstrap script: `EC2 User Data`
+    - default `root user`
+    - run on `first launch`
 - SSH from AWS console: `EC2 Instance Connect `
     - only Works out-of-the-box with Amazon Linux 2
     - need `port 22` open
@@ -69,6 +71,7 @@
 - `Spread` 
     - spreads instances across AZ
     - `high availability`, failure proof
+    - 7 instances per az per group
     - eg: `critical tasks`
 - `Partition`
     - partition: essentially is physical rack
@@ -224,7 +227,7 @@
 - `scale out(+), scale in (-)` instances, `maintaining scale` 
 
 ### `Launch Template`
-- all new instance created by ASG will be created according to the `Launch Template`
+- all new instance created by ASG will be created according to the `Launch Template`:: eg. a mixture of spot/on-demand instance types(that meet a scale/performance/cost)
 
 ### Scaling Policies 
 - Dynamic Scaling Policies 

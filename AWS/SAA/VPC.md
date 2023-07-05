@@ -52,6 +52,10 @@
 - NAT Instance (outdated)
     - NAT = Network Address Translation
     - an `EC2 instance`, configured to `redirect IP packet to the destination` private instance want 
+    - vs nat gateway cannot do
+        - Security Groups can be associated
+        - support port forwading
+        - can be used as baston host
     - details:
         - Must be launched in a public subnet
         - Must disable EC2 setting: `Source /destination Check`

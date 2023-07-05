@@ -16,7 +16,7 @@
 # Lambda
 - misc:
     - Pay per `request(calls)`/ `compute time(duration)` 
-    - Increasing RAM will also improve CPU and network! (resource auto-scale)
+    - Increasing RAM will also improve CPU and network! (resource auto-scale): allocates compute power in proportion to the memory you allocate to your function
 - support
     - most programming language
     - Container (must implement `Lambda Runtime API`)
@@ -25,7 +25,10 @@
     - REM: up to 10G
     - Disk: up to 10G
     - Concurrency executions: 1000 (can be increase)
-
+- dependencies:
+    - All the dependencies are packaged into the single Lambda deployment package, which also contain prod codes. 
+- Lambda Layer 
+    - If you intend to reuse code in more than one Lambda function, you should consider creating a Lambda Layer for the reusable code - You can configure your Lambda function to pull in additional code and content in the form of layers. A layer is a ZIP archive that contains libraries, a custom runtime, or other dependencies. With layers, you can use libraries in your function without needing to include them in your deployment package. Layers let you keep your deployment package small, which makes development easier. A function can use up to 5 layers at a time. 
 # DynamoDB
 - serverless `NoSQL`
     - default: `multiple AZs`, ASG
@@ -115,6 +118,7 @@
         - `Cognito User Pools` => ALB endpoint
 - `Cognito Identity Pools` (CIP) (old name: Federated Identities): 
     - Provide `AWS credentials to users` so they have `temporary identities(STS)` to `directly access AWS resources`
+    - identity pools aren't an authentication mechanism in themselves (just provide the aws auth)
     - `Cognito Identity Pools` => AWS service directly(eg. Lambda, just like using IAM)
     - misc: 
         - Users source can be `Cognito User Pools`, or `3rd party login`...

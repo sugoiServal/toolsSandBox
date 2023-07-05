@@ -123,6 +123,11 @@
 
 
 # S3
+### misc
+- After a successful write of a new object or an overwrite of an existing object, any subsequent read request immediately receives the latest version of the object.
+- The minimum storage duration is 30 days before you can transition
+objects from S3 Standard to S3 One Zone-IA. 
+------
 - `Buckets` 
     - must have a `globally unique name` (across all regions all accounts)
     - defined at the `region level`

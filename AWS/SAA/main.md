@@ -2707,7 +2707,7 @@ encrypted)
     - `EC2 instances`
         - use System Manager (`SSM`) `agent`
         - `OS vulnerabilitie`, unintended network accessibility
-    - Container `Images` push to `ECR`
+    - `Container Images` push to `ECR`
         - Assessment when images are pushed
     - `Lambda Functions`
         - find software vulnerabilities in function code and package dependencies
@@ -3096,10 +3096,8 @@ disaster
 - Chaos testing
     - Netflix has a “simian-army” randomly terminating EC2
 ## DMS – Database Migration Service
-- migrate databases to
-AWS
-    - source database remains available
-during the migration
+- migrate databases to AWS
+    - source database remains available during the migration
     - Homogeneous/Heterogeneous migrations
     - Continuous Data Replication using CDC
     - `must create an EC2 instance` with `DMS` to perform the replication tasks

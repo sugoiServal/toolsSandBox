@@ -27,9 +27,9 @@
 ## components of kubernete cluster
 ### **node**: virtual or physical machine
 ### **Pods** 
-- pod are the smallest, most basic deployable objects in Kubernetes. **It is an abstration of container (one or multiple containers as a whole, usually 1 application per pod).**  When a Pod runs multiple containers, the containers are managed as a single entity and share the Pod's resources.
+- pod are the smallest, most basic deployable objects in Kubernetes. **It is an abstration of application (one or multiple containers as a whole, usually 1 application per pod).**  When a Pod runs multiple containers, the containers are managed as a single entity and share the Pod's resources.
 - each pod gets its **temporary own IP address** in the virtual network
-- pods are **ephemeral/die easily**, once a pod die and a new pod replace it with a new IP address
+- pods are **ephemeral/die easily**, once a pod die and a `new pod replace it with a new IP address`
 ### **service**
 - service open an perment incoming ip for incoming request for certain "service", and forward the requests to the correct pod
 - service contain an **permanent IP address** that provide certain service. it's an abstraction of pod. even if the pod inside the service died and being replaced, service IP address remains intact

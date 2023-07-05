@@ -27,6 +27,7 @@
     - use to access CLI/SDK
 - IAM `Roles`
     - Provide Services permissions
+    - Using IAM roles, it is possible to access cross-account resources. 
 
 - IAM Security Tools
     - IAM Credentials Report (account-level)
@@ -145,14 +146,93 @@
     -
 
 ## SSM Parameter Store
+- storage for `configuration` and `secrets`
+    - allow versioning
+    - tree hierarchy directory (eg, /aws/reference/secretsmanager/secret_ID_in_Secrets_Manager)
+    - misc
+        - allllow 
+        - Encryption(optional) using `KMS`
+        - Security through IAM
+        - use EventBridge for notification
+- Parameter Policies(advanced tier)
+    -  assign a T`TL to a parameter` -> force update/deletion
+
 ## AWS Secrets Manager
+- Newer service to store secrets
+    - scheduled rotation
+    - Mostly for DB secrets(RDS, documentDB, redshift), support KMS
+
+- Multi-Region Secrets(read replicate)
+    - use replicates like original in another region (multi-region apps, DBs..)
+    -  promote a read replica Secret to a standalone Secret
 ## AWS Certificate Manager (ACM)
+-  provision, manage, and deploy `TLS Certificates (HTTPs)`
+    - public and private TLS certificates, `public TLS free of charge`
+    - Automatic TLS certificate renewal
+- support certification: 
+    - ELB,
+    ![](https://imgur.com/9oX82xa.jpg)
+    - CloudFront, 
+    - API Gateway   
+        - must Create `Custom Domain Name` in API Gateway
+        - endpoint types
+            - Edge-Optimized (default): For global clients
+                - TLS Certificate must be in the same region
+            -  Regional: For clients within the same region
+                - TLS Certificate must be imported on API Gateway 
+    - `Cannot use ACM with EC2!`
+
+- to request Public Certificates (略)
+    1. List domain names to be included in the certificate
+    2. Select Validation Method: `DNS Validation` or `Email validation`
+    3. It will take a few hours to get verified
+    4. The Public Certificate will be enrolled for automatic renewal
+    - ACM automatically renews ACM-generated certificates 60 days before expiry
+
+
+- Certificates renewal alert(must be manually renew)
+    1. `ACM` sends `daily expiration events` (EventBridge) 
+    2. OR use `AWS Config` rule `acm-certificate-expiration-check` (EventBridge)
 
 # Network Security
 ## WAF - Web `Application` Firewall
+ protect wen application in `Layer 7 (HTTP)`
+    - integrations
+        - ALB
+        - API Gateway
+        - CloudFront
+        - AppSync GraphQL API
+        - Cognito User Pool
+    - Define `Web ACL (Web Access Control List) Rules`:
+        - `IP` Set Rules: up to 10,000 IP addresses
+        - HTTP `headers`, HTTP `body`, or `URI strings`: protect `SQL injection` and `Cross-Site Scripting (XSS)`
+        - `geo-match (block countries)`
+        - Rate-based rules (count occurrences of events) – for `DDoS protection`
+    - A `rule group` is a `reusable set of rules that you can add to a web ACL`
+    - `Web ACL` can be `attached` to resources
+- WAF + `ALB`, with `fix IP` solution
+    - We can use `Global Accelerator` for fixed IP 
+![](https://imgur.com/JYhcCnC.jpg)
 ## AWS Shield - DDoS attack
+- protect DDoS attack: many distributed requests at the same time
+- AWS Shield Standard:
+    - `Free service for every AWS customer`
+    - protect `SYN/UDP Floods`, Reflection attacks and other `layer 3/layer 4 attacks`
+- AWS Shield Advanced:
+    - Protect against more sophisticated attack on Amazon EC2, Elastic Load Balancing (ELB), Amazon CloudFront, AWS Global Accelerator, and Route 53
+    - 24/7 access to AWS `DDoS response team (DRP)`
+    - automatically create WAF rules
 ## Firewall Manager
-
+- Manage `security rules` in `all accounts of an AWS Organization`
+    - Rules are applied automatically to `new resources` across future accounts in your Organization
+    - usage: `cross-accounts` rule managements
+    - rules:
+        - WAF rules 
+        - AWS Shield Advanced 
+        - Security Groups 
+        - AWS Network Firewall (VPC Level)
+        - Amazon Route 53 Resolver DNS Firewall
+        - Policies are created at the region level
 
 
 # Monitor
@@ -296,8 +376,33 @@
 
 # Misc
 ## GuardDuty
+- `ML` `Threat discovery` (through `analysising logs`)
+    - inputs
+        - `CloudTrail Events Logs` – unusual API calls
+        - `CloudTrail Management Events` – create VPC subnet, create trail, …
+        - `CloudTrail S3 Data Events` – object CRUD
+        - `VPC Flow Logs` – unusual internal traffic
+        - `DNS Logs `
+        - `Kubernetes Audit Logs` 
+    - output: EventBridge rules, EventBridge rules + SNS/Lambda
+- Can protect against `CryptoCurrency attacks` (has a dedicated “finding” for it)
+
+
 ## Inspector
+- Instance/ application level risk check
+    - `EC2 instances`: OS, Network, use `SSM agent`
+    - `Container Images` push to `ECR`: analysis when pushing
+    - `Lambda Functions`: code, dependency vulnerabilities
+
+- A risk score is associated with all vulnerabilities for prioritization
+
+- output: `Security Hub`, `EventBridge`
+
 ## Macie
+- ML discover sensitive data in AWS.
+    - such as `personally identifiable information (PII)`
+![](https://imgur.com/dqc1NWr.jpg)
+
 
 # architectures
 - Intercept API Calls (CloudTrail + EventBridge)
@@ -307,13 +412,13 @@
 ### Application1: copying Encrypted EBS volumn to another Region
 1. EBS Volume Encrypted With KMS Key A
 2. Create EBS Snapshot from EBS Volume, will also Encrypted With KMS Key A
-3. Copy Snapshot to other region, Must use KMS ReEncrypt to encrypt the snapshot with KMS Key B
+3. Copy Snapshot to other region, Must use KMS `ReEncrypt` to encrypt the snapshot with KMS Key B
 4. restore EBS volumn in other region with with KMS Key B
 ### Application2: copying Encrypted EBS volumn across accounts
 1. Create a Snapshot, encrypted with
 your own KMS Key (Customer
 Managed Key)
-2. Attach a KMS Key Policy to
+2. Attach a `KMS Key Policy` to
 authorize cross-account access
 3. Share the encrypted snapshot
 4. (in target) Create a copy of the
@@ -335,3 +440,24 @@ encrypted)
     - `share the KMS Keys` used to encrypted the AMI snapshot to target account
     - target account must have the permissions to DescribeKey, ReEncrypted, CreateGrant, Decrypt APIs
     - target account can now launching an EC2 instance from the AMI, maybe specify a new KMS key in its own account to re-encrypt 
+
+
+## DDoS Resilient Archetectures
+- Edge Location Mitigation
+    - edge location have the `default DDoS protection`: `Infrastructure layer defense` (BP1, BP3, BP6)
+        - CloudFront
+        - Global Accelerator
+        - Route 53
+- DDoS mitigation
+    - EC2 with `Auto Scaling`, `ELB`: `(BP7, BP6)`
+        - Allocate more resource to accommodate users if the traffic do reach the EC2 instance.
+- Application Layer Defense 
+    - `WAF` detect and filter malicious web requests  (BP1, BP2)
+    - `Shield Advanced` (BP1, BP2, BP6)
+- Attack surface reduction
+    - Hide AWS resources from attacker: 
+        - CloudFront, API Gateway, ELB
+    - Security groups and Network ACLs
+        - filter traffic based on specific IP at the subnet or ENI-level
+    - Protecting API endpoints (BP4)
+        - API Gateway, WAF + API Gateway
