@@ -14,7 +14,6 @@
 <tr th:object="${grade}">
     <td th:text="*{name}"></td>
 </tr>
-
 ```
 
 ### Thymeleaf conditions
