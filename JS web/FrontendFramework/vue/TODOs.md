@@ -1,0 +1,3 @@
+- Pinia
+- vitest
+- vue router

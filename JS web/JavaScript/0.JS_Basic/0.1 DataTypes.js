@@ -14,7 +14,7 @@
         // Can be uninitialized
         // cannot be redeclare in strict mode ('use strict';)
         //! the variable is defined in a immediated block scope (a pair of {}), and no more exist after the "}"
-            //* so in block scope we can define a variable with let which have the same name as another variable outside 
+            //* in block scope we can define a variable "let letName", while there exist a variable name "letName" outside 
      
     // *const
         // Cannot be reassigned

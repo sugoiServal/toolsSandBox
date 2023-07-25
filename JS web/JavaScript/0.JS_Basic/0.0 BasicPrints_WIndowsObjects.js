@@ -1,80 +1,77 @@
 //? Console
-    console.clear();
-    console.time('TIMER');
-    console.log(123);
-    console.table({a:1, b:2});
-    console.error('This is some error');
-    console.warn('This is some error');
-    console.timeEnd('TIMER');
+console.clear();
+console.time('TIMER');
+console.log(123);
+console.table({a:1, b:2});
+console.error('This is some error');
+console.warn('This is some error');
+console.timeEnd('TIMER');
 
 
 
 
 
 //? Window Object
-    // METHODS
-        // setTimeout()
-        setTimeout(function(){console.log("hello")}, 2000);   // run the anom function after 2 seconds
-        // Alert
-        alert('Hello World');
+// METHODS
+setTimeout(function(){console.log("hello")}, 2000);   // run the anom function after 2 seconds
+alert('Hello World');
 
-        // Prompt
-        const input = prompt();
-        alert(input);
+const input = prompt();  // prompt()
+alert(input);
 
-        // Confirm
-        if(confirm('Are you sure')){
-        console.log('YES');
-        } else {
-        console.log('NO');
-        }
 
-    // Window PROPERTIES
-    {
-        let val;
+if(confirm('Are you sure')){  // Confirm
+    console.log('YES');
+} else {
+    console.log('NO');
+}
 
-        // Outter height and width
-        val = window.outerHeight;
-        val = window.outerWidth;
+// Window PROPERTIES
+{
+    let val;
 
-        // Inner height and width
-        val = window.innerHeight;
-        val = window.innerWidth;
+    // Outter height and width
+    val = window.outerHeight;
+    val = window.outerWidth;
 
-        // Scroll points
-        val = window.scrollY;
-        val = window.scrollX;
+    // Inner height and width
+    val = window.innerHeight;
+    val = window.innerWidth;
 
-        // Location Object
-        val = window.location;
-        val = window.location.hostname;
-        val = window.location.port;
-        val = window.location.href;
-        val = window.location.search;
-    }
+    // Scroll points
+    val = window.scrollY;
+    val = window.scrollX;
 
-    // Navigate through pages
-    {    
-        // Redirect
-        window.location.href = 'http://google.com';
-        //Reload
-        window.location.reload();
+    // Location Object
+    val = window.location;
+    val = window.location.hostname;
+    val = window.location.port;
+    val = window.location.href;
+    val = window.location.search;
+}
 
-        // History Object
-        let val;
-        window.history.go(-2);
-        val = window.history.length;
-    }
+// Navigate through pages
+{    
+    // Redirect
+    window.location.href = 'http://google.com';
+    //Reload
+    window.location.reload();
 
-    // Navigator Object
-    {    
-        let val;
-        val = window.navigator;
-        val = window.navigator.appName;
-        val = window.navigator.appVersion;
-        val = window.navigator.userAgent;
-        val = window.navigator.platform;
-        val = window.navigator.vendor;
-        val = window.navigator.language;
-    }
+    // History Object
+    let val;
+    window.history.go(-2);
+    val = window.history.length;
+}
+
+// Navigator Object
+{    
+    let val;
+    val = window.navigator;
+    val = window.navigator.appName;
+    val = window.navigator.appVersion;
+    val = window.navigator.userAgent;
+    val = window.navigator.platform;
+    val = window.navigator.vendor;
+    val = window.navigator.language;
+}
 

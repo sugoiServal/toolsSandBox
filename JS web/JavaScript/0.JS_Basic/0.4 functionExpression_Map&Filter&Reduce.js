@@ -52,7 +52,7 @@
 
     //! callback function:
         // function can be passed as parameter into another function
-        function printGood() {
+        function callback() {
           console.log(" Good");
         }
 
@@ -97,10 +97,7 @@
             { id: 88, name: 'Commander Jerjerrod' }
         ];
         // What you need: officersIds == [20, 24, 56, 88]
-        let officersIds = officers.map(function (officer) {  // function expression
-            return officer.id
-          });
-        officersIds = officers.map(officer => officer.id);   // equally with arrow function
+        let officersIds = officers.map(officer => officer.id);   // equally with arrow function
 
         // what happened?
           // map take 2 argument: a callback function and an (optional) context (this in the example)
@@ -133,10 +130,7 @@
           ];
 
           // 01) what you want: the total number of years of all pilots(the accumulator)
-          let totalYears = pilots.reduce(function (accumulator, pilot) {
-            return accumulator + pilot.years;
-          }, 0);
-          totalYears = pilots.reduce((accumulator, pilot) => accumulator + pilot.years, 0);  // equally with arrow function
+          let totalYears = pilots.reduce((accumulator, pilot) => {return accumulator + pilot.years}, 0);  // equally with arrow function
           
           // what reduce do: run callback function on all value and an global variable, the variable is set to 0 on start(2nd parameter). return the global variable
 
