@@ -1,147 +1,255 @@
-- **Openstack** is a Infrastructure as a Service/Private Cloud Platfrom. You could also look at it as a way to orchestrate Virtual Machines. It could help you to setup a private cloud in your datacenter where you could automate the provisioniong, scaling of VMs, Storage, Network etc.
 - **Docker** is a tool which does two main things.
-  - Provides a standard packaing format i.e. docker image, to pack your application with the runtime. This provides the portability.
-  - Provides a runtime so that your applications packages as docker images can run in a contained/isolated environment on the similar lines of running a VM.
+  - (build) build i.e. docker image, to pack your application
+  - (run) Provides a runtime that run the application in a contained/isolated environment
 
-- Docker provides packaging and runtime. However, when it comes to running containers at scale, on more than one nodes, you need a way to manage, scale, connect the containers and the nodes both. This is what **kubernetes** offers. Thats why kubernetes is also called as Container Orchestration Engine (COE). You could look at it as a Container as a Service platform.
+- **kubernetes** : running containers and manage container's lifecycle at scale. Container Orchestration Engine (COE). 
 
-![!](https://imgur.com/W4VZwlD.jpg)
-# Docker
-[netNinja](https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7)
-## image
-- Think of image as the blueprint to construct a container, they store things like
+- Container vs VMs:
+  - solve the `same problem`: run an application with all its dependency in a controlled environment
+  - `Container` shared the kernel of the host OS
+  - `VM` has its own full operating system
+  - container is quicker 
+
+- `Docker ref` [video](https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7) [github](https://github.com/iamshaunjp/docker-crash-course)
+
+- install [docker desktop](https://www.docker.com/products/docker-desktop/)
+```bash
+# Check installation
+docker version
+```
+
+# image
+- `image`: blueprint to construct a container, including
   - runtime environment
   - application code
-  - dependencies
+  - install dependencies
   - extra configuration files (eg, parameters, env variables)
-  - comments to run applications
-  - file system of the project
-- images are **read-only** after created
-- the main purpose of is to share with others, they are typically small
-### breakdown of image
-images are made up of several layers
-- parent image:
-  - OS and sometimes the runtime environment (eg, node 17 on ubuntu 2004)
-  - use [dockerhub](https://hub.docker.com/search?q=) to find and download docker parent images
-- application specific env, source codes, commands, etc will be packed above parent image, using dockerfile, to make the final image
-### dockerfile
-- see https://www.youtube.com/watch?v=G07FcRhYB2c&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=5
-- see project docker-crash-course
-### image version tag:
-- all imagination can be used in combination with a tag(string, number, etc) to specify distribution/version etc
+  - project file system
+
+- properties
+  - images are **read-only** after created. 
+  - Image are small. 
+  - Image are shared in DockerHub
+
+- `image layers`
+  - parent image: 
+    - OS and the runtime environment (eg, node 17 on ubuntu 2004), [resource](https://hub.docker.com/search?q=)
+    - application specific env, source codes, commands, etc. Built on top of parent image
+
+- `image tags` 
+  - `tag (:)` provide versioning to image (distro, software version...)
+
 ```bash
-imageName:tag
+# imageName:tag
+docker pull mysql:latest
 ```
-### image in action
-- build docker image:
+
+
+- use `dockerfile` to build image
+
+## dockerfile
+- a sample dockerfile
+```Dockerfile
+# pull a parent layer 
+FROM node:17-alpine    
+
+# RUN a command onthe root dir
+RUN npm install -g nodemon
+
+# specify the working dir in image
+  # all following command are run inside the dir 
+WORKDIR /app
+
+# COPY from src dir(rel:dockerfile) to image dir(rel:working directory) 
+COPY . .
+
+# RUN command on the image working dir
+RUN npm install
+
+# expose a port of the container (require for docker desktop port mapping)
+EXPOSE 4000
+
+# AFTER BUILD: command to run after the container loaded(runtime)
+CMD ["node", "app.js"]
+```
+
+- `.dockerignore`
+  - file/folder to exclude when run `COPY . .`
+  - eg> excluding node_modules and all markdown file
+```
+node_modules
+*.md
+```
+
+# Docker Cli
+
+### Build
 ```bash
 docker build -t imageName ./path_to_dockerfile
 # Build a docker image and tag it:
-    docker build --tag imageName:tag ./path_to_dockerfile
+docker build --tag imageName:tag ./path_to_dockerfile
 # alternatively use vscode graphical interface
 ```
-- list all images
+
+
+
+### Image Management
 ```bash
+# pull node image from dockerhub
+docker pull node 
+
 # list all available images
 docker images
-```
-- delete docker image:
-```bash
+
+# Deletion
 docker image rm image_name
-# -f force remove in use image
-docker image rm -f image_name
-# remove all images, containers and volumns
-docker system prune -a
+docker image rm -f image_name   # -f force remove in-use image
+docker system prune -a  # remove all images, containers and volumns
 ```
-## container
-- container runs instance of images, in order to run the application
-- container is isolated process: it is independent to any other process in the OS
 
-
-
-- start container, port setup etc: [link](https://www.youtube.com/watch?v=ZPEpreOpqao&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=8)
+### Run Container
+- `container` is built from image
+  -  `container` can be `run`
+  - a `container process` is an isolated process, independent from any other process in the OS
 
 ```bash
-# create container from image (either name or ImageId) and run it
-  # can sub myapp with the ImageId
+# run a container from image  (image -> built container -> run)
+  # can substitute myapp with a ImageId
   docker run --name myapp_container1 myapp  
-  # -p: map local port 5000 to port 4000 in container
+  # -p: map local port 5000 to container port 4000 
   docker run --name myapp_container2 -p 5000:4000 myapp 
   # -d: detach the container process from terminal  
   docker run --name myapp_container2 -p 5000:4000 -d myapp 
 
-# run already built container
+# start an already built container
 docker start myapp_container1
 ```
 
+
+### Container Management
 ```bash
-# list all running docker container (processes) 
+# list containers
 docker ps
-# list all docker container (Runing or Exited)
-docker ps -a
-```
-```bash
+
 # stop a container
 docker stop myapp_container1 # or use container id
+
 # remove a container
 docker container rm myapp_container1
 ```
 
-##  [Volumns](https://www.youtube.com/watch?v=Wh4BcFFr6Fc&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=10)
-- The purpose of volumn is to avoid rebuild images and containers all the time when minor changes occurs frequently in the code
-  
-- Volumes are a feature of Docker that allow us to specify folders in host computer that can be made available to running containers. these folders will be watched and any changed will be reflected in containers (without the need to rebuild the image)
-  
-- the feature of volume is only available, in developed time in other words, only in the developing host. to share the application with the others you still need to rebuild the image.
+### [dockerHub](https://hub.docker.com/)
+```bash 
+docker login -u userName -p passWord
+# push to remote
+docker push thenetninjauk/myapi:tagname
+# pull to local
+docker pull thenetninjauk/myapi
+```
+### Example
+```bash
+# connect the remote
+ssh -o StrictHostKeyChecking=no -i ~/.ssh/digitalOcean root@137.184.202.238
+# login to dockerHub
+sudo docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASS }}
+# stop and remove all current running images/containers
+sudo docker ps -aq | xargs --no-run-if-empty docker stop | xargs --no-run-if-empty docker rm 
+sudo docker images -aq | xargs --no-run-if-empty docker image rm -f
+# run image from dockerHub
+  # with environmentVariable in a file 
+sudo docker run -p 4000:4000 \
+  --env-file /root/survey_collector_config/.env \
+  $IMAGE_NAME:$IMAGE_TAG_BACK
+sudo docker run -d -p 3000:3000 $IMAGE_NAME:$IMAGE_TAG_FRONT
+```
 
+
+# docker-compose.yaml
+- think `docker-compose` as a minimal kubernetes
+  - good for small project with a few docker container
+  - save the pain of running many cli commands
+- `docker-compose` is an application that
+  - store multiple image/container running configuration in a file
+  - execute the file to `build + run`. 
+- config are written in `yaml`
+  - ex1
+```yaml
+# docker-compose.yaml
+version: "3.8"
+services:
+  api:             # backend
+    build: ./api   # Dockerfile location
+    container_name: api_c
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./api:/app
+      - ./app/node_modules
+  myblog:         # frontend
+    build: ./myblog  
+    container_name: myblog_c
+    ports:
+      - '3000:3000'
+    stdin_open: true
+```
+
+- docker-compose can also start an DockerHub application without and local code 
+  - ex2: start an containerized mySQL server
+```yaml
+version: '3.3'
+services:
+  db:
+    image: mysql/mysql-server:8.0
+    restart: always
+    environment:      # environment variable 
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'   # map local port 3306 to container port 3306
+    expose:           # expose container port
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+volumes:
+  my-db:(base)
+```
+```bash
+# cd <folder containing docker-compose.yaml>
+docker compose up
+```
+
+### Up/Down docker-compose  
+- `up` = build container from image + run container
+- `down` = stop and delete container (image and volumn are retained by default)
+```bash
+# dir where docker-compose.yaml located
+
+# up
+docker-compose up
+
+# down
+docker-compose down
+docker-compose down --rmi all -v # these options remove images/volumns as well
+```
+
+
+# Misc
+##  [Volumns](https://www.youtube.com/watch?v=Wh4BcFFr6Fc&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=10)
+
+- `Why Volumns:` avoid rebuild images when minor changes occurs frequently in dev
+  
+- `Volumes` 
+  - a feature of Docker
+  - allows to `specify folders` in dev computer. 
+    - These folders will `be watched` and any `changed will be reflected in containers (no rebuild)`
+
+- 感觉没什么用，略
 ```bash
 # -v add volumns when building container
 # docker run --name container_name -p 4000:4000 -v abs_from_path:container_path myapp:nodemon
 docker run --name myapp_nm_1 -p 4000:4000 -v C:\Users\wli20\OneDrive\Desktop\projectsSandbox\_prj\ninja\docker-crash-course\api:/app -v /app/node_modules myapp:nodemon
 ```
-- TODO: anonymous volume
 
-## [Docker Compose](https://www.youtube.com/watch?v=TSySwrQcevM&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=11)
-Docker compose is able to store multiple image/container configuration into A file And to build/run them simultaneously. this is typically useful when a project need to run multiple container simultaneously.
-- Docker Compose is a run-through config file option
-- it save the pain of running many complex cli commands
-
-```yaml
-# docker-compose.yaml
-version: "3.8"
-service: 
-  api:
-    build: ./api  # the Dockerfile location
-    container_name: myapp_c1
-    ports:
-      - '4000:4000'
-    volumns:
-      - ./api:/app
-      - ./app/node_modules
-```
-- run the docker compose => build image, build container from image, start container
-```bash
-# in same dir to docker-compose.yaml
-docker-compose up
-```
-- down the docker compose => stop and delete container, retain built image and volumn
-```bash
-# in same dir to docker-compose.yaml
-docker-compose down
-docker-compose down --rmi all -v # these options remove images/volumns as well
-```
-## share image to [dockerHub](https://hub.docker.com/)
-```bash 
-docker login -u userName -p passWord
-# push to remote
-docker push thenetninjauk/myapi:tagname
-# pull down to local
-docker pull thenetninjauk/myapi
-```
-## misc
-- Container vs VMs:
-  - they solve the same problem: run an application with all its dependency in a controlled environment
-  - Container shared the kernel of the host OS
-  - virtual machines has its own full operating system
-  - container is typically quicker than VMS
 
