@@ -112,7 +112,18 @@ docker system prune -a  # remove all images, containers and volumns
   -  `container` can be `run`
   - a `container process` is an isolated process, independent from any other process in the OS
 
+- flags:
+  - detach: detach the container process from terminal  
+  - name: container name
+  - publish: port forwarding
+  - network: use docker network
+  - env: use environment variables
+  - env-file: specify a file containing all env vars
+  - volume: specify volumes
 ```bash
+docker run <OptionsFlags> imageName
+
+
 # run a container from image  (image -> built container -> run)
   # can substitute myapp with a ImageId
   docker run --name myapp_container1 myapp  
@@ -121,13 +132,37 @@ docker system prune -a  # remove all images, containers and volumns
   # -d: detach the container process from terminal  
   docker run --name myapp_container2 -p 5000:4000 -d myapp 
 
+# a bigger example
+docker run --name jenkins-blueocean --restart=on-failure --detach \
+  --network jenkins --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  myjenkins-blueocean:2.332.3-1
+
 # start an already built container
 docker start myapp_container1
-
-# execute a command inside a running container
-docker exec jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword  
 ```
 
+- docker exec: Get into the container
+  - detach:  Run a command in the background (detached)
+  - workdir: the workdir inside container the command should be execute in
+  - user: run command as a user
+  - interactive(-it): start an interactive Bash session
+  - env: Set an environment variable in a running Bash session
+```bash
+# execute a command inside a running container
+docker exec container_name command
+# Enter an interactive shell session on an already-running container:
+docker exec --interactive --tty container_name /bin/bash
+# Execute the command inside `path/to/directory`
+docker exec --interactive -tty --workdir path/to/directory container_name command
+# Set an environment variable in a running Bash session:
+docker exec --interactive --tty --env variable_name=value container_name /bin/bash
+# Run a command as a specific user:
+docker exec --user user container_name command
+```
 
 ### Container Management
 ```bash
@@ -178,8 +213,41 @@ docker push thenetninjauk/myapi:tagname
 docker pull thenetninjauk/myapi
 ```
 
+###  Volumns
+[ref](https://medium.com/techmormo/how-do-docker-volumes-enable-persistence-for-containers-docker-made-easy-4-2093a1783b87)
 
-### Example
+- `purpose of Volumns:` data persistence
+  - container's data lost when it shutdown. If it runs a database, that is disaster.
+  - `volume` enable two-way sync between a `directory in the host machine` and `a directory in the container` (aka, mount a storage into container)
+
+- !! All volumes + data are managed by Docker inside the directory in host
+  - linux: `/var/lib/docker/volumes/`
+  - wsl: `\\wsl.localhost\docker-desktop-data\data\docker\volumes`
+```bash
+docker volume ls # list all volumes
+docker volume create <volumeName>  # create a volume. 
+docker volume inspect <volumeName>  # View info about the volume
+
+# remove volumes
+docker volume rm <volumeName>
+docker volume prune
+```
+
+- Mount volumes to containers
+```bash
+# mount an anonymous volume, a volume will be automatically created with a random name
+docker run -v <containerDir> -d --name container1 
+
+# mount a named volume. It will be created if not already created
+docker run -v mongo_data:/data/db -d --name container1 
+
+# bind an arbitrary path in host machine to a path in the container
+docker run -v /path/on/your/host:/data/db -d --name container1 
+```
+
+
+
+### Example: a part script in a CICD pipeline
 ```bash
 # connect the remote
 ssh -o StrictHostKeyChecking=no -i ~/.ssh/digitalOcean root@137.184.202.238
@@ -197,14 +265,14 @@ sudo docker run -d -p 3000:3000 $IMAGE_NAME:$IMAGE_TAG_FRONT
 ```
 
 
-# docker-compose.yaml
+# docker-compose
 - think `docker-compose` as a minimal kubernetes
   - good for small project with a few docker container
   - save the pain of running many cli commands
 - `docker-compose` is an application that
   - store multiple image/container running configuration in a file
   - execute the file to `build + run`. 
-- config are written in `yaml`
+- config are written in `docker-compose.yaml`
   - ex1
 ```yaml
 # docker-compose.yaml
@@ -265,24 +333,6 @@ docker-compose up
 # down
 docker-compose down
 docker-compose down --rmi all -v # these options remove images/volumns as well
-```
-
-
-# Misc
-##  [Volumns](https://www.youtube.com/watch?v=Wh4BcFFr6Fc&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=10)
-
-- `Why Volumns:` avoid rebuild images when minor changes occurs frequently in dev
-  
-- `Volumes` 
-  - a feature of Docker
-  - allows to `specify folders` in dev computer. 
-    - These folders will `be watched` and any `changed will be reflected in containers (no rebuild)`
-
-- 感觉没什么用，略
-```bash
-# -v add volumns when building container
-# docker run --name container_name -p 4000:4000 -v abs_from_path:container_path myapp:nodemon
-docker run --name myapp_nm_1 -p 4000:4000 -v C:\Users\wli20\OneDrive\Desktop\projectsSandbox\_prj\ninja\docker-crash-course\api:/app -v /app/node_modules myapp:nodemon
 ```
 
 
