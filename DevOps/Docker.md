@@ -53,7 +53,7 @@ docker pull mysql:latest
 # pull a parent layer 
 FROM node:17-alpine    
 
-# RUN a command onthe root dir
+# RUN a command in the root dir
 RUN npm install -g nodemon
 
 # specify the working dir in image
@@ -123,6 +123,9 @@ docker system prune -a  # remove all images, containers and volumns
 
 # start an already built container
 docker start myapp_container1
+
+# execute a command inside a running container
+docker exec jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword  
 ```
 
 
@@ -138,6 +141,34 @@ docker stop myapp_container1 # or use container id
 docker container rm myapp_container1
 ```
 
+### docker network
+- `Docker networking` enables communication between containers and external networks (eg. host machine or other containers). 
+  - there are 6 network driver modes [docs](https://docs.docker.com/network/drivers/bridge/)
+  - default one is `Bridge Driver`
+
+```bash
+docker network ls  # list all networks
+```
+
+- `Bridge Driver` (default): creates an internal network within a single host
+  - Containers can communicate with each other in the Bridge Network
+  - Containers can communicate with the host machine
+  - Containers are isolated from external newtorks unless specific ports are exposed
+
+```bash
+docker network create my_bridge_network
+docker run -d --name container1 --network my_bridge_network nginx
+docker run -d --name container2 --network my_bridge_network nginx
+```
+
+- Other Networks Driver modes
+  - `None`: isolates a container by disabling its network.
+  - `Host Driver`: allows the container to share the network stack of the host system
+  - `Overlay Driver`: creates a distributed network able to span multiple hosts.
+  - Overlay Network
+  - Macvlan Network
+  - IPvlan
+  
 ### [dockerHub](https://hub.docker.com/)
 ```bash 
 docker login -u userName -p passWord
@@ -146,6 +177,8 @@ docker push thenetninjauk/myapi:tagname
 # pull to local
 docker pull thenetninjauk/myapi
 ```
+
+
 ### Example
 ```bash
 # connect the remote
