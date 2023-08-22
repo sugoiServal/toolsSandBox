@@ -10,15 +10,7 @@
   - `VM` has its own full operating system
   - container is quicker 
 
-- `Docker ref` [video](https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7) [github](https://github.com/iamshaunjp/docker-crash-course)
-
-- install [docker desktop](https://www.docker.com/products/docker-desktop/)
-```bash
-# Check installation
-docker version
-```
-
-# image
+## image
 - `image`: blueprint to construct a container, including
   - runtime environment
   - application code
@@ -39,15 +31,9 @@ docker version
 - `image tags` 
   - `tag (:)` provide versioning to image (distro, software version...)
 
-```bash
-# imageName:tag
-docker pull mysql:latest
-```
-
-
-- use `dockerfile` to build image
 
 ## dockerfile
+- use `dockerfile` to build image
 - a sample dockerfile
 ```Dockerfile
 # pull a parent layer 
@@ -83,6 +69,22 @@ node_modules
 
 # Docker Cli
 
+### refs
+- [101-video](https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7) 
+- [101-github](https://github.com/iamshaunjp/docker-crash-course)
+
+- install [docker desktop](https://www.docker.com/products/docker-desktop/)
+
+- [!cli commands](https://docs.docker.com/engine/reference/run/)
+
+
+- Check installation
+
+```bash
+# Check installation
+docker version
+```
+
 ### Build
 ```bash
 docker build -t imageName ./path_to_dockerfile
@@ -91,12 +93,10 @@ docker build --tag imageName:tag ./path_to_dockerfile
 # alternatively use vscode graphical interface
 ```
 
-
-
 ### Image Management
 ```bash
-# pull node image from dockerhub
-docker pull node 
+# pull image from dockerhub
+docker pull image:tag 
 
 # list all available images
 docker images
