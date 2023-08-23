@@ -6,13 +6,13 @@
 
 
 - `Jenkins Infrastructure`:
-    - Master Server(admin): control pipeline, schedule builds
-    - Agents(Runner)
+    - `Master Server(admin)`: control pipeline, schedule builds
+    - `Agents(Runner)`
         - `Pernament Agents`: any linux server
             - require `java` runtime
             - `connect to Master` Server via `SSH`
         - `Cloud Agents`: ephemeral agents that run on demand, (eg. `docker, AWS AMI...`)
-
+    - `Labels`: Labels (or tags) are used to group multiple agents into one logical group.
 - Pipeline:
     - Commit to repo 
     -> Master Server aware of the commit(webhook, etc), 
@@ -39,7 +39,6 @@
 
 # job outputs files location
 /var/jenkins_home/workspace/
-
 ```
 
 ### Docker Volume
@@ -57,22 +56,68 @@ docker run --name jenkins-blueocean --restart=on-failure --detach \
  
 
 # Setup Jenkins Agents
+### Nodes (`Pernament Agents/Slave Agent`)
+- [ref video](https://www.youtube.com/watch?v=fphtfmAsfhU)
+    - Manage Jenkins -> Nodes -> New Node
+    - configure the node's Label and SSH/credientials, etc
+    - run two command inside the agent machine (require Java runtime installed)
 
-### Agents Label
+### Cloud (`Cloud Agents`)
+- Manage Jenkins -> Cloud -> Install Plugin for the Cloud Provider
+    - setup EC2 Cloud [FollowVideo](https://www.youtube.com/watch?v=RkaqRsockfg) 
 
-# Create Jobs
+# Setup Jobs 
+- Job: 
+    - A job may contains multiple build.
+    - Job is a config/template on how builds are run
+        - build trigger
+        - source code Repository
+        - build runner (Label)
+        - pre-build actions 
+        - build environment var/files
+        - build actions
+        - after build actions
+- Build: 
+    - builds are actual tasks that run in the runner
+    - build will be logged
+
 ## Setup Source Repository
-- After setting up Source Code Repo, when the job run code will be automatically clone to job folder
-    - public github repo don't need any Credential
-    - private github repo need Credentials
+- provide `Git repository url`, will automatically clone the repo to job folder
+    - public repo don't need any Credential
+    - private repo need to setup Credentials
 
-## Setup Build Trigger(TODO)
-- webhook
+### Setup ssh between Jenkins and Github
+- [video](https://www.youtube.com/watch?v=9-ij0cJLDz4)
+- [generate SSH Keypair](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- setup `public key` in Github Setting
+- In Job configuration, add `private key` to the Git repo crediential 
+    - kind: SSH Username with private key
+    - Username: should be Github.com username
+
+- troubleshoot
+    - provide ssh url to the repo (eg: git@github.com:mlpppp/repoName)
+    - test ssh to github: ssh -T git@github.com
+    - Manage Jenkins -> Security -> Git Host Key Verification Configuration -> Accept first connection
+
+
+## Setup Build Trigger
+- pull SCM: periodically scan for change (eg, 5 mins)
+    - [follow](https://youtu.be/6YZvp2GwT0A?t=2882)
+- `github webhook` (github send notification to jenkins)
+    - [follow](https://www.youtube.com/watch?v=PhxZamqYJws)
 
 
 
-# Write Pipeline
+# Pipeline (Groovy)
 
-### Hands-on (TODO): 
+
+# Misc
+### Commonly Jenkins env var
+- commonly used:
+    - JOB_URL: Full URL of this job\
+    - BUILD_URL: Full URL of this build
+    - BUILD_ID: The current build ID
+
+# Hands-on (TODO): 
 - try to migrate [this](https://gitlab.com/nanuchi/gitlab-cicd-crash-course) to Jenkins
 
