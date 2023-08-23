@@ -105,12 +105,73 @@ docker run --name jenkins-blueocean --restart=on-failure --detach \
     - [follow](https://youtu.be/6YZvp2GwT0A?t=2882)
 - `github webhook` (github send notification to jenkins)
     - [follow](https://www.youtube.com/watch?v=PhxZamqYJws)
+    - Select `GitHub hook trigger for GITScm polling`
+    - whithlist Github hook ips in Jenkins Server's firewall 
+        - eg: Security Group, allow Custom TCP from Github ips to port 8080 (where Jenkins run)
+        - about [github IP range](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-githubs-ip-addresses) [meta](https://api.github.com/meta)
+        - [ref] (https://stackoverflow.com/questions/48930089/setup-github-webhook-for-jenkins-installed-on-aws-ec2)
+    - Github -> Settings -> Webhooks -> Add webhook
+        - Payload URL: Jenkins Master url (eg. http://ec2-XX-XXX-XX-XXX.eu-west-1.compute.amazonaws.com:8080/github-webhook/)
+        - Content type: json
 
 
 
-# Pipeline (Groovy)
 
+# Pipeline (Groovy), 
+- `Declarative pipeline`: write pipeline inside a `Jenkinsfile` and link jenkins job to the file
+    - use `Pipeline script from SCM`
+- Agent vs Node:
+    - Node can be thought of as a `single worker machine` that execute your pipeline's steps. `Node can use label but Agent cannot`
+    - Agent is used in `Declarative pipeline` context, represents a machine (Node) where `pipeline stages` are executed
+- keywords
+    - agent: It is defined for either an entire pipeline or a specific stage.
+    - node: A node is a machine that executes an entire workflow, 
+    - label: use label to group nodes
+    - triggers: trigger to run a build
+    - stage: each stage performs a specific task.
+    - steps: a sequence of command to be run sequentially
 
+```groovy
+pipeline {
+    agent { 
+        node {
+            label 'docker-agent-python'
+            }
+    }
+    triggers {
+        pollSCM '* * * * *'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building.."
+                sh '''
+                cd myapp
+                pip install -r requirements.txt
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Testing.."
+                sh '''
+                cd myapp
+                python3 hello.py
+                python3 hello.py --name=Brad
+                '''
+            }
+        }
+        stage('Deliver') {
+            steps {
+                echo 'Deliver....'
+                sh '''
+                echo "doing delivery stuff.."
+                '''
+            }
+        }
+    }
+}
+```
 # Misc
 ### Commonly Jenkins env var
 - commonly used:
