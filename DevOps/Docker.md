@@ -10,6 +10,27 @@
   - `VM` has its own full operating system
   - container is quicker 
 
+### Install docker
+- Install Docker inside Amazon Linux(EC2) [link](https://www.cyberciti.biz/faq/how-to-install-docker-on-amazon-linux-2/)
+```bash
+sudo yum update
+sudo yum install docker
+
+# Add group membership for the default ec2-user so you can run all docker commands without using the sudo command:
+sudo usermod -a -G docker ec2-user
+id ec2-user
+# Reload a Linux user's group assignments to docker w/o logout
+newgrp docker
+
+# Need docker-compose too?
+wget https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) 
+sudo mv docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
+sudo chmod -v +x /usr/local/bin/docker-compose
+
+# test
+docker version
+docker-compose version
+```
 ## image
 - `image`: blueprint to construct a container, including
   - runtime environment
@@ -77,7 +98,7 @@ node_modules
 
 - [!cli commands](https://docs.docker.com/engine/reference/run/)
 
-
+- Install Docker inside Amazon Linux(EC2) [lnik](https://www.cyberciti.biz/faq/how-to-install-docker-on-amazon-linux-2/)
 - Check installation
 
 ```bash
@@ -174,6 +195,10 @@ docker stop myapp_container1 # or use container id
 
 # remove a container
 docker container rm myapp_container1
+
+# stop and remove all current running images/containers
+sudo docker ps -aq | xargs --no-run-if-empty docker stop | xargs --no-run-if-empty docker rm 
+sudo docker images -aq | xargs --no-run-if-empty docker image rm -f
 ```
 
 ### docker network
