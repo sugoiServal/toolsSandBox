@@ -11,7 +11,8 @@
         - `Pernament Agents`: any linux server
             - require `java` runtime
             - `connect to Master` Server via `SSH`
-        - `Cloud Agents`: ephemeral agents that run on demand, (eg. `docker, AWS AMI...`)
+        - `Cloud Agents`: automatically spawn ephemeral agents that run on demand, (eg. `docker, AWS AMI...`)
+            - use plugins + config certain cloud provider
     - `Labels`: Labels (or tags) are used to group multiple agents into one logical group.
 - Pipeline:
     - Commit to repo 
@@ -64,7 +65,7 @@ docker run --name jenkins-blueocean --restart=on-failure --detach \
 
 ### Cloud (`Cloud Agents`)
 - Manage Jenkins -> Cloud -> Install Plugin for the Cloud Provider
-    - setup EC2 Cloud [FollowVideo](https://www.youtube.com/watch?v=RkaqRsockfg) 
+    - setup EC2 Cloud [FollowVideo](https://youtu.be/RkaqRsockfg?t=1156) 
 
 # Setup Jobs 
 - Job: 

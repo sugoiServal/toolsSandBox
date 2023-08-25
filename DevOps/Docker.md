@@ -180,7 +180,7 @@ docker container rm myapp_container1
 - `Docker networking` enables communication between containers and external networks (eg. host machine or other containers). 
   - there are 6 network driver modes [docs](https://docs.docker.com/network/drivers/bridge/)
   - default one is `Bridge Driver`
-
+- [read](https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach)
 ```bash
 docker network ls  # list all networks
 ```
@@ -207,10 +207,12 @@ docker run -d --name container2 --network my_bridge_network nginx
 ### [dockerHub](https://hub.docker.com/)
 ```bash 
 docker login -u userName -p passWord
+# Tag your image with your Docker Hub username/repository
+docker tag your-image-name:tag mlpppp/your-image-name:tagname
 # push to remote
-docker push thenetninjauk/myapi:tagname
+docker push mlpppp/your-image-name:tagname
 # pull to local
-docker pull thenetninjauk/myapi
+docker pull mlpppp/your-image-name
 ```
 
 ###  Volumns
