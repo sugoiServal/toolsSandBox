@@ -3,20 +3,14 @@
 - feature: 
    - 不像bootstrap, tailwind里面的基本模块style不是事先写好的也就是说用户可以深度的定制他想要使用的基本style模块
    - 相比bootstrap, tailwind提供的模块/utility class更加low level
-   - 而在定义好基本模块的STYLE以后tailwind使用上和不像bootstrap很相似都是使用class来指定element的STYLE
+   - 而在定义好基本模块的STYLE以后tailwind使用上和bootstrap很相似都是使用class来指定element的STYLE
 
-- setup:
-```
-npx tailwindcss init --full 
-```
-- compile:
-  - tailwind require initial compile, see [installation guide](https://tailwindcss.com/docs/installation) for detail 
-```
-npx tailwindcss -i build src/input.css -o output/output.css
-```
+- [setup](https://tailwindcss.com/docs/installation/framework-guides)
+
+
 # Basic
-## color
-https://tailwindcss.com/docs/customizing-colors
+## [color](https://tailwindcss.com/docs/customizing-colors)
+
 
 |||
 |-|-|
@@ -60,8 +54,11 @@ https://tailwindcss.com/docs/customizing-colors
 
 ## image
 - [object fit](https://tailwindcss.com/docs/object-fit):" Utilities for controlling how a replaced element's content should be resized.
+
 ## icons
 - use third party icons with Tailwind [tutorial](https://www.youtube.com/watch?v=aNmBiqK2uQ0&list=PL4cUxeGkcC9gpXORlEHjc5bgnIi5HEGhw&index=14)
+
+
 # Element
 ## margin/ padding/ border
 [margin](https://tailwindcss.com/docs/margin)
@@ -100,10 +97,12 @@ https://tailwindcss.com/docs/customizing-colors
 </button>
 ```
 - [opacity](https://tailwindcss.com/docs/opacity)
-## misc
-|||
-|-|-|
-|curosr-pointer||
+
+
+### cards/ badges/ button
+- there's no premade card/badege/ button classes out of the box but we can create them with elementary utilities easily
+- TBD
+
 # flex/ grid
 ## [flex](https://www.youtube.com/watch?v=WK6u8YDYqak&list=PL4cUxeGkcC9gpXORlEHjc5bgnIi5HEGhw&index=7)
 - flex container it's required to make the child flex
@@ -116,6 +115,7 @@ https://tailwindcss.com/docs/customizing-colors
 |-|-|
 |justify-center/start/end|main axis|
 |items-end|align in cross axis|
+
 ## grid
 - [display: grid](https://tailwindcss.com/docs/display)
 ```html
@@ -128,10 +128,10 @@ https://tailwindcss.com/docs/customizing-colors
 - [gap](https://tailwindcss.com/docs/gap)
 - [col-span](https://tailwindcss.com/docs/grid-column) [row-span](https://tailwindcss.com/docs/grid-row) Determine how much col/row an element occupy
 - [grid-flow-row, grid-flow-col](https://tailwindcss.com/docs/grid-auto-flow) controlling how elements in a grid are auto-placed.
-# Application
-### cards/ badges/ button
-- there's no premade card/badege/ button classes out of the box but we can create them with elementary utilities easily
-- TBD
+
+
+
+
 # Responsive
 
 - [responsive design](https://tailwindcss.com/docs/responsive-design)
@@ -180,13 +180,20 @@ transition is used in conjunction with **hover:**
 ```html
 <div class="overflow-hidden ..."></div>
 ```
+
 ### Dark Mode
 - [dark mode](https://tailwindcss.com/docs/dark-mode)
-# @apply
-- @apply is used to create reproducible component (Reusing)
-- [reuse](https://tailwindcss.com/docs/reusing-styles)
+
+# custom styles
+- `@layer` tell Tailwind which “bucket” a set of custom styles belong to. Valid layers are base, components, and utilities.
+- `@apply` is used to adding custom base styles to a custom styles
+- [directives ref](https://tailwindcss.com/docs/functions-and-directives#layer)
+  - `@tailwind base` includes the reset/normalized default styles and --tw-xxx CSS variables. Open https://play.tailwindcss.com/YpShH9YUHX?file=css and check out the full list at "Generated CSS" → "Base" tab.
+  - `@tailwind components` is empty by default. We want to have our custom components like `.btn, card, badge` to be included at this layer.
+  - `@tailwind utilitites` includes their shining utilities like `text-gray-900`, `font-bold` etc.
+
 ```css
-<!-- in src/style.css -->
+/* <!-- in src/style.css --> */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -204,6 +211,7 @@ transition is used in conjunction with **hover:**
   }
 }
 ```
+
 # custom config
 [tutorial](https://www.youtube.com/watch?v=6UVQlB1eo5A&list=PL4cUxeGkcC9gpXORlEHjc5bgnIi5HEGhw&index=5)
 - it is recommand to split config into two file 'tailwind.config.js' and 'tailwind-default.config.js' so that it is easy to see what are out of box and what are customized

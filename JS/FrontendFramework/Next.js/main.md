@@ -1,4 +1,5 @@
 ## [Tutorial](https://www.youtube.com/watch?v=A63UxsQsEbU&list=PL4cUxeGkcC9g9gP2onazU5-2M-AzA8eBw) [code](https://github.com/iamshaunjp/nextjs-tutorial)
+## [project](https://www.youtube.com/watch?v=CMx51wpd7g4) [github](https://github.com/fireclint/portfolio-nextjs)
 ## [Document](https://nextjs.org/docs/)
 - what it is: Framework for creating **pre-rendered static React website**, either SSR or SSG
   - Server Side Rendering(SSR): render React components in server 
@@ -36,11 +37,11 @@ import { useEffect, useState } from 'react'
 
 
 ### route
-- Each page in Next application is a component inside a file in the `pages` folder
-- a URL to a page is the directory to the specifics page file
+- `Each page` in Next application is `a component inside a file` in the `pages` folder
+- a `URL` to a page is the `directory to the page file`
   - a file named with 'index.js' is '/' in the corresponding url
   - other arbitrary file names eg: 'about.js' is '/about' in url
-- url/file name/page components name are all case sensitive
+- url/file name/page components name are all `case sensitive`
 
 ### use links
 - use `<Link>` component to link pages (in client via js, without requesting server)
@@ -69,7 +70,7 @@ router.push('/')  // redirect to url
 
 ### Reusable components
 - create and use components just like React
-- Components should not be created in the `pages` folder
+- `Components should NOT be created in the pages folder`
 
 ### Layout Component
 - layout component is wrapper to components, Like group components together to reuse the layout
@@ -97,9 +98,11 @@ export default function Layout({children}) {
   )
 }
 ```
-### images and resources
+### Image
 - resources/images inside `/public` can be imported and used directly
-- nextjs `Image` component, helps setup image width/height and various properties in-place easily
+- when specify `src, use relative path to '/public'`
+
+- use next `Image` component, `setup image width/height` 
 
 ```js
 import Image from 'next/image'
@@ -127,7 +130,9 @@ import { Head } from 'next/document'
 - Only the javascript code that is needed by the current page is served to the user initially
 - Only when used to navigate to **another page** for the first time will the js codes to that page be served 
 
-## styling(css, without framework)
+
+# Styling 
+[styling](https://nextjs.org/docs/app/building-your-application/styling)
 
 # Static Site Generation (SSG)
 ## fetching REST data
@@ -138,7 +143,7 @@ import { Head } from 'next/document'
 ### getStaticProps
 - [doc](https://nextjs.org/docs/basic-features/data-fetching/get-static-props)
 
-> If you export a function called getStaticProps (Static Site Generation) from a page, Next.js will pre-render this page at build time using the props returned by getStaticProps. ... any props will be passed to the page component and can be viewed on the client-side in the initial HTML ... Make sure that you don't pass any sensitive information that shouldn't be available on the client in props
+> If you export a function called getStaticProps (Static Site Generation) from a page, Next.js will pre-render this page at build time using the props returned by getStaticProps. ... any props will be passed to the page component and can be viewed on the client-side in the initial HTML
 
 - getStaticProps `always runs on the server` and never on the client.
 - 
@@ -173,14 +178,14 @@ export default function index( props:object ) {
 - [video](https://www.youtube.com/watch?v=WPdJaBFquNc&list=PL4cUxeGkcC9g9gP2onazU5-2M-AzA8eBw&index=11)
 - these pages content is data dependents (controlled by the data return by a REST api) 
 - they generally have the same template to generate the page, only data is different
-- Everything, every pages is still prendered in the server, after fetching the data in server
+- Everything, every pages is still pre-rendered in the server, after fetching the data in server
 
-- use `[id].js` as page file name, use bracket `[]` to tell next that is url parameterized page. `id` or any other name is arbitrary
+- use `[id].js` as page file name, use bracket `[]` to tell next that is `url parameterized page`. `id` or any other name is arbitrary
   - the parameter field is append to the last level of url **(the folder name)**
 
 ### getStaticPaths
 - [doc](https://nextjs.org/docs/basic-features/data-fetching/get-static-paths)
-> Export a function called getStaticPaths (Static Site Generation) from a page that uses dynamic routes
+> Export a function called getStaticPaths (Static Site Generation) `from a page that uses dynamic routes`
 
 > If a page has Dynamic Routes and uses getStaticProps, it needs to define a list of paths to be statically generated. `The list of paths defined a set of pages to be generated (for each path)` ... Next.js will statically pre-render all the paths specified by getStaticPaths.
 
@@ -231,4 +236,4 @@ export default function Post({ post }) {
 
 # Server Side Rendering
 ### getServerSideProps
-### getInitialProps)
+### getInitialProps
