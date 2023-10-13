@@ -24,6 +24,12 @@ caw, c5w, ci{, cf<char>, ct<char>, c/{pattern}
 w, b - word movement
 ```
 
+- .vimrc
+
+```bash
+echo 'set number' >> .vimrc
+```
+
 ## Movement
 
 - `hjkl`
@@ -35,7 +41,7 @@ w, b - word movement
          ↓
 ```
 
-- `w`/ `b`: word movement
+- `w`/ `b`: word movement(to beginning of word)
 
 - `{`, `}`, jumps to prev/next code block
 
@@ -59,7 +65,7 @@ w, b - word movement
 
 - edit char
 
-  - `r`: chae one char
+  - `r`: change one char
   - `x`: delete one char
 
 - delete (`c`) - (also `d` - stay Normal)
@@ -72,14 +78,19 @@ w, b - word movement
     - `ci[`, `ci{` - inner
       - `cit`: change in HTML/XML tag
 
+  - insert mode (same in bash)
+
+    - `ctrl-w`: d one word
+    - `ctrl-u`: d til the begining
+
   - delete directional
 
-    - `ct <char>`: till char
-    - `cf <char>`: till char (incl)
+    - `ct <char>`: till char, `T` backward
+    - `cf <char>`: till char (incl), `F` backward
     - `c/ {pattern}`: till pattern
     - `C`: till end of line
 
-- `gg + dG`: clear document
+- `gg-dG`: clear document
 
 - Copy/Paste
 
@@ -97,6 +108,27 @@ w, b - word movement
   - `3>>` - indent 3 line below
   - `3<<` - unindent 3 line below
 
+## Visual Mode
+
+- visual mode = mouse drag
+
+  - `v` for character-wise visual mode
+  - `V` for line-wise visual mode
+  - `Ctrl-v` for block-wise visual mode
+    - `I/A, <insert>, ESC` prepend/append to multi-curosr location
+    - `$, A, <insert>, ESC` append to the end of multi-lines
+
+- `substitute command`: `s` can be used to insert (or replace) text
+  - `^/$`: means the beginning/end of line
+  - `\/`, `\^`, `\$`: escape signs
+  - eg:
+    - `:s/^/<comment>/` : comment out selection
+    - `:s/^<comment>/` : uncomment selection
+    - `:s/Hello world$/` : remove "Hello world" at the end of each line
+- in VSCode-vim:
+  - you can chain visual block with multi-cursor(`I, A`)
+  - I have mapped `ctrl-v` to `alt-v`
+
 ## special
 
 - `.`: repeat the last insert/delete/cp/indent operation
@@ -107,13 +139,32 @@ w, b - word movement
 ```typescript
 // change courteous to polite: /co<ENTER>cfspolite<ESC>n.
 const courteousSalute = "I courteously salute you good person.";
+// (/cu<ENTER>dawn.n..n.)
+cucumber carrot lettuce
+cabbage carrot lettuce cucumber
+cucumber cucumber carrot
+kale cucumber kale
 ```
 
 - misc(略)
   - gd: go to `definition` of an token
   - `%` jump to matching `({[]})`.
 
+## :commands
+
+- `:wq` : write quit
+- `:qa!`: Force close the current file without saving changes
+- `:e!`: Discard changes and reload the current file.
+- `:sav fname`: Save the current file as a new file.
+- `:r filename`: Read the contents of a file into the current document.
+- `:set number`: display number
+
+:replace/search/replace/flags: Replace occurrences of a search pattern with a replacement.
+:!command: Execute a shell command from within Vim.
+
 ## Advanced
+
+# Bounus:
 
 ### Register
 
@@ -124,52 +175,17 @@ const courteousSalute = "I courteously salute you good person.";
 - 存疑
   - The **cut registers** `1-9` store the last 9 cut ❓
 
-# Bounus: Command Line edit
+## Command Line
 
 - `ctrl-a/e`: go to start/end of line
+- `ctrl-shift-c/v`: copy/paste
 
 - delete(cut)
 
   - `alt-backspace/d`: delete word backward/forward
-  - `ctrl-k`: delete till end
-  - `ctrl-u`: delete till begining
-
-- paste
-
+  - `ctrl-w`; delete/cut word
+  - `ctrl-k`: delete/cut till end
+  - `ctrl-u`: delete/cut till begining
   - `ctrl-y`: paste cut text
 
 - `clear`: clear screen
-
-Ctrl-A: Move the cursor to the beginning of the line.
-Ctrl-E: Move the cursor to the end of the line.
-Ctrl-U: Delete from the cursor position to the beginning of the line.
-Ctrl-K: Delete from the cursor position to the end of the line.
-Ctrl-W: Delete the word to the left of the cursor.
-Alt-B or Esc-B: Move the cursor backward one word.
-Alt-F or Esc-F: Move the cursor forward one word.
-Editing Text:
-
-Ctrl-L: Clear the screen (similar to the clear command).
-Ctrl-Y: Paste the last text that was cut or deleted.
-Alt-D or Esc-D: Delete the word to the right of the cursor.
-Cut and Copy:
-
-Ctrl-K: Cut (kill) text from the cursor position to the end of the line.
-Ctrl-U: Cut (kill) text from the cursor position to the beginning of the line.
-Ctrl-Y: Paste (yank) the last cut or deleted text.
-Search and Replace:
-
-Ctrl-R: Start a reverse search for previously executed commands. Repeatedly press Ctrl-R to cycle through results.
-Ctrl-G or Enter: Exit the search.
-Alt-. or Esc-.: Paste the last argument from the previous command.
-History Navigation:
-
-Up Arrow or Ctrl-P: Navigate backward through command history.
-Down Arrow or Ctrl-N: Navigate forward through command history.
-Ctrl-O: Execute the next command from the history and advance the cursor to the next line.
-Miscellaneous:
-
-Ctrl-C: Terminate the current command or process.
-Ctrl-D: Logout or exit the shell (if the command line is empty).
-Ctrl-Z: Suspend the current process (usually followed by fg to bring it back to the foreground).
-These shortcuts can significantly improve your efficiency when working in the Bash console by allowing you to quickly navigate, edit, and manipulate command lines. You can also customize these shortcuts in your .inputrc configuration file to suit your preferences.
