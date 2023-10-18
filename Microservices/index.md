@@ -23,5 +23,4 @@
 
 - Interface
   - GraphQL
-  - gRPC
-  - Protobuf (protocol buffers)
+  - gRPC, Protobuf (protocol buffers)
