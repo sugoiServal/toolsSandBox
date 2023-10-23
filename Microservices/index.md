@@ -1,8 +1,8 @@
 - Elastic Stack
 
-  - logstash: open-source data processing pipeline that is commonly used for ingesting, processing, and forwarding logs and other event data.
-  - Elasticsearch: It is designed to handle and index large volumes of data, make it searchable, and provide real-time search and analysis capabilities.
-  - Kibana: Kibana is an open-source data visualization and exploration tool
+  - `Elasticsearch`: index data, make it searchable: search engine
+  - logstash: `logs collection`
+  - Kibana: Kibana is an open-source `data visualization and exploration` tool
 
 - Redis: memory cache
 - Apache Cassandra: general purpose distributed NoSQL database (eg: scale PB of dbs in 1000 of nodes)
@@ -11,16 +11,17 @@
 
 - Eureka: a service registry and discovery server designed to facilitate microservices' registration and discovery
 
-- Message:
+- Distributed Message Broker:
 
   - Apache RabbitMQ
   - Apache Kafka
+
+- Communication
+
+  - GraphQL
+  - gRPC, Protobuf (protocol buffers)
 
 - big data
 
   - Apache hadoop
   - Apache Spark
-
-- Interface
-  - GraphQL
-  - gRPC, Protobuf (protocol buffers)

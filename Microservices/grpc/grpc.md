@@ -1,7 +1,8 @@
 - Resource:
+
+  - https://grpc.io/docs/what-is-grpc/introduction/
   - https://www.youtube.com/watch?v=DU-q5kOf2Rc
-  - dependencies
-    - https://github.com/grpc/grpc-java
+
 - Protobuf: 数据编码（serialize/deserialize）， `think json/text` alternative
 
   - 在 `.proto` 文件中定义数据结构(eg, parameters)
@@ -42,15 +43,36 @@
       - any kind of communication: bidirectional Streaming, unidirectional streaming, req-res
 
 - Why RPC:
+
   - RPC 机制抽象了网络通信的复杂性，使远程服务能够像本地服务一样被访问。允许`分布式系统无缝运行`，使开发人员更容易构`建跨多台机器或服务的应用程序`。
   - a typical RPC:
     - Client-Stub Procedure: client `initiates the RPC` by `calling a procedure(Client-Stub)` that appears as if it's a local function call
     - `Parameters and Metadata` to the procedure are `packaged into a Message`, then `serialized` before `transmitted` over the network
-    - Server Stub Procedure: a procedure in `server side (Server Stub) listen to RPC calls` in a network address and port
-    - Server Stub
+    - Server Procedure: a procedure in `server side (Server Stub) listen to RPC calls` in a network address and port
+    - Server
       - `deserializes the message`,
       - `locates servers that implement the requested procedure`,
       - `calls the procedure with deserialized parameters`
     - Server Response: After executing the requested procedure, the server procedure a `response (return values, metadata)`, then `serialized `the response before `transmitted` over the network
     - Client Application Integration: client stub `returns the result to the client application`, which can continue its execution as if the remote procedure call is local function call
     - Error Handling: `Both client and server components handle errors` (network failures, timeouts, or exceptions in the remote procedure call)
+
+- `bi-directional stream` use case example:
+  - Bulk upload, where a client sends chunks of data, and the server responds with an acknowledgement or resumption key.
+  - flow control where a client or server can ask for more data as and when it needs
+
+### tldr
+
+- why gRPC:
+
+  - HTTP/2, binary transfer, fast
+  - structured payload, Strongly Typed,
+  - Not need to write client server. everything generated
+  - streaming, bi-directional streaming
+  - integrates features that support microservices: load balancing, service discovery...
+
+- what need to be write
+  - .proto
+  - service definition(use .proto)
+  - grpc server (register services)
+  - client (use .proto)

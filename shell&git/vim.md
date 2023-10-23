@@ -42,6 +42,7 @@ echo 'set number' >> .vimrc
 ```
 
 - `w`/ `b`: word movement(to beginning of word)
+- `e`: word movement(to end of word)
 
 - `{`, `}`, jumps to prev/next code block
 
@@ -59,7 +60,7 @@ echo 'set number' >> .vimrc
 
 - enter Insert
 
-  - `i`/`a`: insert mode (prepend/ append)
+  - `i`/`a`: insert mode (prepend/ append to the cursor)
   - `I`, `A`: prepend/ append to line
   - `o`, `O`: new line
 
@@ -189,3 +190,4 @@ kale cucumber kale
   - `ctrl-y`: paste cut text
 
 - `clear`: clear screen
+

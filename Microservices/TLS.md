@@ -1,0 +1,2 @@
+- TLS (Transport Layer Security) is successor to SSL, when people say SSL today they refers to TLS
+- browser that use HTTP/2 require TLS
