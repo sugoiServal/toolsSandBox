@@ -2,5 +2,6 @@
 
 - symbol
   - `ctrl-shift-.` :list all symbols
-  - `ctrl-shift-p => #`: search for symbols
+  - `shift-esc => #`: search for symbols
   - `alt-enter`- quick fix
+

@@ -1,3 +1,0 @@
-- an open-source `distributed search engine`
-  - based on Apache Lucene
-  - expose REST API(CRUD)

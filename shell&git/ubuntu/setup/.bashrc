@@ -138,3 +138,5 @@ alias gitadd="git add :/"
 alias gitcommit="git commit -am"
 alias gpush="git push origin master"
 alias gignore="git rm -r --cached . && git add . && git commit -m 'Untrack files in .gitignore'"
+alias idea='/opt/idea-IC-232.10072.27/bin/idea.sh'
+alias ideacd='pwd | xargs /opt/idea-IC-232.10072.27/bin/idea.sh'

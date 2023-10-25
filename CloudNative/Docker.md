@@ -182,6 +182,8 @@ docker run --name jenkins-blueocean --restart=on-failure --detach \
 docker start myapp_container1
 ```
 
+### Bssh in Container
+
 - docker exec: Get into the container
   - detach: Run a command in the background (detached)
   - workdir: the workdir inside container the command should be execute in
@@ -200,6 +202,9 @@ docker exec --interactive -tty --workdir path/to/directory container_name comman
 docker exec --interactive --tty --env variable_name=value container_name /bin/bash
 # Run a command as a specific user:
 docker exec --user user container_name command
+
+# Copy the http_ca.crt SSL certificate from the container to your local machine.
+docker cp myContainer:/usr/share/elasticsearch/config/certs/http_ca.crt .
 ```
 
 ### Container Management

@@ -120,7 +120,7 @@ echo 'set number' >> .vimrc
     - `$, A, <insert>, ESC` append to the end of multi-lines
 
 - `substitute command`: `s` can be used to insert (or replace) text
-  - `^/$`: means the beginning/end of line
+  - `^`, `$`: means the beginning/end of line
   - `\/`, `\^`, `\$`: escape signs
   - eg:
     - `:s/^/<comment>/` : comment out selection
@@ -128,14 +128,13 @@ echo 'set number' >> .vimrc
     - `:s/Hello world$/` : remove "Hello world" at the end of each line
 - in VSCode-vim:
   - you can chain visual block with multi-cursor(`I, A`)
-  - I have mapped `ctrl-v` to `alt-v`
 
 ## special
 
 - `.`: repeat the last insert/delete/cp/indent operation
 - `n`: repeat the last search
 - `u`: undo
-- `Ctrl-u`: redo
+- `Ctrl-r`: redo
 
 ```typescript
 // change courteous to polite: /co<ENTER>cfspolite<ESC>n.
@@ -190,4 +189,3 @@ kale cucumber kale
   - `ctrl-y`: paste cut text
 
 - `clear`: clear screen
-
