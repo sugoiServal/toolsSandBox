@@ -5,7 +5,8 @@
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-web</artifactId>
-</dependency>		<dependency>
+</dependency>		
+<dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-devtools</artifactId>
 	<scope>runtime</scope>
@@ -31,7 +32,11 @@
     <version>1.7.0</version>
 </dependency>
 
-
+<!-- reactive programming -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
 
 <dependency>
 	<groupId>org.springframework.boot</groupId>
@@ -48,8 +53,6 @@
     <scope>runtime</scope>
 </dependency>
 
-
-
 <!-- minimize boilerplate codes -->
 <!-- add: Lombok Annotations Support for VS Code -->
 <dependency>
@@ -57,7 +60,6 @@
 	<artifactId>lombok</artifactId>
 	<scope>provided</scope>
 </dependency>
-
 
 <dependency>
 	<groupId>org.springframework.boot</groupId>
@@ -69,6 +71,3 @@
     <artifactId>java-jwt</artifactId>
     <version>4.4.0</version>
 </dependency>
-
-
-

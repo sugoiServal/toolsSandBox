@@ -169,6 +169,10 @@ docker run <OptionsFlags> imageName
   # -d: detach the container process from terminal
   docker run --name myapp_container2 -p 5000:4000 -d myapp
 
+# restart container
+  docker restart containerName
+
+
 # a bigger example
 docker run --name jenkins-blueocean --restart=on-failure --detach \
   --network jenkins --env DOCKER_HOST=tcp://docker:2376 \
@@ -270,7 +274,7 @@ sudo docker run -d -p 3000:3000 $IMAGE_NAME:$IMAGE_TAG_FRONT
 ```bash
 docker volume ls # list all volumes
 docker volume create <volumeName>  # create a volume.
-docker volume inspect <volumeName>  # View info about the volume
+docker volume inspect <volumeName>  # View mount directory of the volume
 
 # remove volumes
 docker volume rm <volumeName>
@@ -299,6 +303,7 @@ docker run -v /path/on/your/host:/data/db -d --name container1
 
 ```bash
 docker network ls  # list all networks
+docker network rm elk-net  # remove a network
 ```
 
 - `Bridge Driver` (default): creates an internal network within a single host

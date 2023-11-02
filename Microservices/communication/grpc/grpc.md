@@ -2,6 +2,7 @@
 
   - https://grpc.io/docs/what-is-grpc/introduction/
   - https://www.youtube.com/watch?v=DU-q5kOf2Rc
+  - https://www.bilibili.com/video/BV1S24y1U7Xp/?vd_source=c2cab8b68e17f7406c35e588a940b4ae
 
 - Protobuf: 数据编码（serialize/deserialize）， `think json/text` alternative
 
