@@ -200,6 +200,13 @@ docker start myapp_container1
 docker exec container_name command
 # Enter an interactive shell session on an already-running container:
 docker exec --interactive --tty container_name /bin/bash
+
+# run a docker container and a command in interactive mode (-it = --interactive + --tty), automatically remove the container when it exits (--rm)
+docker run -it --rm \
+    --network app-tier \
+    bitnami/kafka:latest \
+    kafka-topics.sh --list  --bootstrap-server kafka-server:9092
+
 # Execute the command inside `path/to/directory`
 docker exec --interactive -tty --workdir path/to/directory container_name command
 # Set an environment variable in a running Bash session:
@@ -411,3 +418,8 @@ docker-compose up
 docker-compose down
 docker-compose down --rmi all -v # these options remove images/volumns as well
 ```
+
+### Network:
+
+- [docs](https://docs.docker.com/compose/networking/)
+- `By default` Compose sets up a single network for your app. Each container for a service joins the default network and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the container name.

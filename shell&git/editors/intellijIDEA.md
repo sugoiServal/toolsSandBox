@@ -40,5 +40,10 @@ ctrl-d : add selection to next find match
 
 - `ctrl-w`, `ctrl-shift-w`: expand/shrink selection
 
+### intellicence
+
+- iter - generate iteration
+- sout - sysout
+
 list symbols
 debug experience
