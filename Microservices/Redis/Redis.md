@@ -29,7 +29,8 @@
 
 - tools
   - [clients](https://redis.io/resources/clients/)
-  - [GUI](https://www.dragonflydb.io/guides/redis-gui)
+  - [GUI guide](https://www.dragonflydb.io/guides/redis-gui)
+  - [GUI](https://github.com/qishibo/AnotherRedisDesktopManager)
 
 ### Get started
 
@@ -109,8 +110,8 @@ EXIST name
 
 # query key that matches (https://redis.io/commands/keys/)
   # key matches is costly, not recommend for production environment
-KEY *
-KEY <pattern>
+keys *
+keys <pattern>
 
 # delete a key
 DEL k1 k2
