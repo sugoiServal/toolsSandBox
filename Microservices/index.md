@@ -2,11 +2,6 @@
 
   - CQL query language
 
-- Distributed Message Broker:
-
-  - Apache RabbitMQ
-  - Apache Kafka
-
 - big data
 
   - Apache hadoop

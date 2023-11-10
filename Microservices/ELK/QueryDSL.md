@@ -6,23 +6,25 @@
 
 - API endpoints:
   - `/{index}/_search`: perform search queries
-  - `_doc`: get single doc
+  - `_doc`: single doc
   - `/_bulk`: send multiple document operations in a single request
   - `_analyze`: Performs analysis on a text string and returns the resulting tokens.
+  - `_mapping`
+  - `_update`
 
 # Mapping, Index Creation
 
-- `Mapping` are schemas to indexes: defining document and the fields are indexed and stored
+- `Mapping`: schemas to indexes: defining document, fields to be indexed
 - There are two types of mappings
 
-  - Dynamic Mapping: automatically Mapping, by default you don’t need to create an index and mapping, PUT any document and it will be automatically indexed
+  - Dynamic Mapping (automatically), by default. No need to create an index and mapping, PUT any document and it will be automatically indexed
   - Explicit Mapping: you define your own mapping explicitly
 
-- [docExplicit Mapping:](https://www.elastic.co/guide/en/elasticsearch/reference/current/explicit-mapping.html)
+- [doc:Explicit Mapping:](https://www.elastic.co/guide/en/elasticsearch/reference/current/explicit-mapping.html)
   - `PUT /<index>`: create index API
   - [Field data types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
-    - text: unstructured text, could be tokenized
-    - keyword: keyword, cannot be tokenized (eg. brands, Nation, email)
+    - text: unstructured texts, could be tokenized
+    - keyword: keyword, group of word to represent an entity, cannot be tokenized (eg. brands, nation)
     - Numbers: long, integer, short, double, float...
     - boolean
     - date
@@ -30,31 +32,40 @@
     - geo_point: Latitude and longitude points
     - alias: Defines an alias for an existing field.
     - completion: generate suggestions as type completion for the field
-  - `properties`: indicate an object or an nested object
-  - `index`: whether or not creating an index for search (default: true)
-  - analyzers:
-    - `analyzer`: which tokenizer to used (for a text type) during index creation
-    - `search_analyzer`: which tokenizer to used (for a text type) during search
+  - Query DSL keywords
+    - `properties`: indicate an object or an nested object
+    - `index`: whether or not creating an index for search (default: true)
+    - copy_to: copy several fields to one field (to avoid multiple-fields search which is costly)
+    - analyzers:
+      - `analyzer`: which tokenizer to used (for a text type) during index creation
+      - `search_analyzer`: which tokenizer to used (for a text type) during search
+- [demo](https://www.bilibili.com/video/BV1LQ4y127n4?p=91)
 
 ```json
 PUT /my-index-000001
 {
   "mappings": {
     "properties": {
-      "age":    { "type": "integer" },
+      "all_searchable": {
+        "type": "text",
+      },
+      "age":    {
+        "type": "integer",
+        "copy_to":"all_searchable"
+      },
       "email":  {
         "type": "keyword",
         "index": false
       },
       "name":   {
         "properties": {
-          "firstName": {"type": "keyword"},
-          "lastName": {"type": "keyword"}
+          "firstName": {"type": "keyword", "copy_to":"all_searchable"},
+          "lastName": {"type": "keyword", "copy_to":"all_searchable"}
         }
       },
       "employee-id": {
         "type": "keyword",
-        "index": false
+        "index": false     // this field does not require search
       },
       "info": {
         "type" : "text",
@@ -137,7 +148,7 @@ POST /customer/_update/1
   - `match_all`: return all documents, eg. for test
   - Full text queries: (for text) typically used in `search bar`
     - `match`: tokenize query and then query tokens in Inverted Index
-    - `multi_match`: match with multiple fields
+    - `multi_match`: match a query with `multiple fields`
   - Term-level queries: (for keywords and datatypes) find documents based on precise values in structured data. Eg. 价格 range, 品牌分类， 城市分类...
     - `ids`: id
     - `range`: 根据数值范围
@@ -147,16 +158,16 @@ POST /customer/_update/1
     - geo_bounding_box: 位置处于一个 bounding_box 内的点
     - geo_distance: 位置到圆心距离小于某值的点
   - compound queries:
-    - `function_score`: customize the ranking score function
-      - filter: 哪些 doc 要改分
-      - weight: 怎么计算 weight
-      - boost_mode: weight 怎么 apply to 原始分数
     - `bool`: eg. combined result of search bar(Full text) and filters(Term-level)
       - must: query 必须出现(AND)， 参与算分
       - filter: query 必须出现(AND)， 不参与算分
       - should: query 可以出现(OR)， 参与算分
       - must_not: query 必须不出现(EXCLUDE)， 不参与算分
       - 一般来说搜索关键词用 must, filters 用 filter 或 must_not
+    - `function_score`: customize the ranking score function
+      - filter: 哪些 doc 要改分
+      - weight: 怎么计算 weight
+      - boost_mode: weight 怎么 apply to 原始分数
 
 - query efficiency:
   - 搜索的 field 越多，查询效率越低。
@@ -193,7 +204,7 @@ GET /indexName/_search
 
 // Term-level queires: https://www.elastic.co/guide/en/elasticsearch/reference/current/term-level-queries.html
 
-// Term query
+// Term query (exact)
 GET /_search
 {
   "query": {
@@ -218,7 +229,7 @@ GET /_search
   }
 }
 
-// wild card, regexp match
+// wild card, regexp match (costly)
 GET /_search
 {
   "query": {
@@ -273,8 +284,8 @@ GET /my_locations/_search
 
 
 // Compound queires: https://www.elastic.co/guide/en/elasticsearch/reference/current/compound-queries.html
-// 1. functions: https://www.bilibili.com/video/BV1LQ4y127n4?p=106
-// 2. bool: https://www.bilibili.com/video/BV1LQ4y127n4?p=107
+// 1. bool: https://www.bilibili.com/video/BV1LQ4y127n4?p=107
+// 2. functions: https://www.bilibili.com/video/BV1LQ4y127n4?p=106
 GET _search
 {
   "query": {
@@ -316,7 +327,7 @@ PUT products
 {
   "mappings": {
     "properties": {
-      "<FieldName:name>": {
+      "<FieldName:products_name>": {
         "type": "completion"
       }
     }
@@ -360,7 +371,6 @@ POST music/_search?pretty
   - [Paginate](https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html)
   - [sort](https://www.elastic.co/guide/en/elasticsearch/reference/8.10/sort-search-results.html)
   - [highlighting](https://www.elastic.co/guide/en/elasticsearch/reference/8.10/highlighting.html)
-
   - [Aggregation](https://www.elastic.co/guide/en/elasticsearch/reference/8.10/search-aggregations.html)
 
 ### Paginate
@@ -371,7 +381,7 @@ POST music/_search?pretty
   - `size`: the maximum number of hits to return
 
 - By default, cannot use `from` and `size` to page more than `10,000 hits`. (search requests usually span multiple shards. Deep pages or large sets of results can significantly increase CPU/Memory)
-  - `search_after`: 解决一次查询 10000 以上条的方案
+  - `search_after`: 解决一次查询 10000 以上条的方案 [ref](https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after)
 
 ### Sort
 
@@ -379,7 +389,7 @@ POST music/_search?pretty
   - keyword, number, date
   - `_geo_distance`
 - by default docs are sorted by `_score` (BM25 algorithm)
-  - 使用 custom sort 后不再算分
+- 如使用 custom sort， 不再计算 BM25 score
 
 ### Highlighting
 
@@ -396,13 +406,10 @@ GET _search
     // define queires
   },
 
-  // sort by multiple criterias
+  // sort by multiple criterias： https://www.elastic.co/guide/en/elasticsearch/reference/8.10/sort-search-results.html
   "sort": [
     {
       "<FIELD1>": "desc"    // sortBy fields: keywords, numbers, date
-    },
-    {
-      "<FIELD2>": "asc"
     },
     {
       "_geo_distance" : {  // sortBy geo_distance: FIELD loc's distance to a point
@@ -413,11 +420,11 @@ GET _search
     }
   ],
 
-  // paginate
+  // paginate： https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html
   "from": 15,   // skip
   "size": 25,  // number
 
-  // highlight
+  // highlight： https://www.elastic.co/guide/en/elasticsearch/reference/8.10/highlighting.html
   "highlight": {
     "fields": {
       "<FIELD>": {   // highlight field
@@ -438,11 +445,9 @@ GET _search
   - `Metric` aggregations: calculated metrics (sum or average)
   - `Pipeline` aggregations: input from other aggregations/ output to other aggregation (eg> Bucket aggregation to Metric aggregations)
 
-- Aggregation do not support `text`
+- Aggregation do not support `text`. could be: term , numbers, dates...
 
-  - could be: term , numbers, dates...
-
-- docs
+- refs
   - [Bucket](https://www.elastic.co/guide/en/elasticsearch/reference/8.10/search-aggregations-bucket.html)
   - [Metric](https://www.elastic.co/guide/en/elasticsearch/reference/8.10/search-aggregations-metrics.html)
   - [Pipeline](https://www.elastic.co/guide/en/elasticsearch/reference/8.10/search-aggregations-pipeline.html)
@@ -457,8 +462,8 @@ GET _search
 
 ### Metric Aggregation
 
-- common type of Metric Aggs
-  - Avg, Min, Max, Stats, ...
+- [ref](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html)
+- common type of Metric Aggs -` Avg, Min, Max, Stats`, ...
 
 ```json
 GET /my-index-000001/_search
@@ -469,17 +474,17 @@ GET /my-index-000001/_search
 
   "aggs": {
     "<aggName>": {
-      "terms": {   // term aggregation
-        "field": "<my-field>",
+      "terms": {   // bucket: based on term value
+        "field": "<my-field>",    // the term for <my-field> field
         "size": 10 , // number of result to return
         "order": {   // alter sorting behavior by sub agg's calculated value
           "scoreAgg.avg": "desc"
         },
       },
-      "aggs": {     // sub Aggs to each bucket: Metric
+      "aggs": {     // sub Aggs to each bucket: Metric: Stats
         "<aggName: scoreAgg>":  {
           "stats": {  // calculate stats: min, max, avg, sum
-            "field": "<my-field>"
+            "field": "<my-field>"   // calculate stat for my-field
           }
         }
       }

@@ -35,27 +35,29 @@
 - ElasticStack (ELK Stack)
 
   - ElasticSearch: distributed searching
-  - Logstash: Data ETL (you don't need to use it though, SQS+Lambda, Kafka, AWS Glue...)
-  - Kibana: data visualization (dashboarding)
+  - Logstash: Data ETL (you don't need to use it though, SQS+Lambda, Kafka Stream, AWS Glue...)
+  - Kibana: data visualization (dashboarding, GUI, run query DSL)
 
 - features:
 
   - `Elasticsearch client` (SDK for admin, indexing, searching): Java, JavaScript, Go, .NET, PHP, Perl, Python or Ruby.
-  - `Document`: use JSON document as data
+  - `Document`: `JSON document` as data
+  - `Indexes`: collection of documents, can be applied with schemas
+  - `Mapping`: provide schema
   - `Inverted Index`:
     - `tokenization`: ingress documents are broken into tokens (`Semantically`: words, numbers, geospacial...)
     - `Inverted Index`: a mapping of tokens to documentId is created: Inverted Index (eg: "fox" -> docID_list[1,3,4,5])
     - when searching, Elasticsearch scan through tokens to collect the documents' id, then retrieve these documents
-    - `Ranked Result`: Index also store Positional Information - where in the document the term appears. Positional Info helps ranking group of result docs and return in revelance-sorted order
-  - `Mapping`: provide schema, in order to support non-auto-detected data types
-  - `Query DSL` (ElasticSearch's query language), or `SQL-style (JDBC...)`
-    - `Analysis, Aggregations...`
+    - `Ranked Result`: use ranking to sort return documents
+      - by default, rank is based on Positional Information - where in the document the term appears.
+  - `Query DSL` (ElasticSearch's query language), HTTP request like
+    - `Write, Query, Analysis, Aggregations...`
   - `Elasticsearch Cluster`:
     - 存储的文档分布在整个集群中，并且可以`从任何节点开始搜索`(每个 node 都具有 HTTP server)
     - `Shard Routing`: Elasticsearch 自动在所有可用节点上分配/平衡数据(shards)
-      - shard routing mechanism to determine which shard a document belongs to
+      - shard routing: determine which shard a document belongs to
       - routing is typically based on a document's id and a hash function
-    - `coordinating node`: coordinate distributed query
+    - `coordinating node`: responsible for coordinating `distributed query`
       - When a query is issued to an Elasticsearch cluster, it is routed to a coordinating node, which
         - `scatter` query to the correct data nodes, then data node execute their query locally,
         - `gather` data node's results into a result set
@@ -69,11 +71,7 @@
   - `Data Preprocessing`: you can perform data pre-processing as part of ELT to ES
   - `Did You Mean (DYM) Suggestions`: You can implement Did You Mean (DYM) suggestions to correct user's query (algorithms like Levenshtein distance/ phonetic matching/ Machine Learning-Based)
 
-# Basics Usage:
-
-- ingestion: document creation + indexing
-- feed your data into ES (curl: POST, PUT)
-- start using it for search (curl: GET)
+# Basics Usage
 
 ## Get Started
 
@@ -86,6 +84,8 @@
 docker network create elastic
 docker pull docker.elastic.co/elasticsearch/elasticsearch
 docker run --name es01 --net elastic -p 9200:9200 -p 9300:9300 -it -m 1GB -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch
+  # 9200: client API
+  # 9300: cluster inter-node
 
 # get a password, default username is 'elastic'
 docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
@@ -115,7 +115,7 @@ docker run \
 # All Set
 ```
 
-- command line examples
+- curl examples
 
 ```bash
 # POST
@@ -174,9 +174,7 @@ curl --cacert http_ca.crt -u elastic:$ELASTIC_PASSWORD -XGET 'https://localhost:
 
 - [doc](https://www.elastic.co/guide/en/elasticsearch/reference/8.10/modules-plugins.html)
 
-# Distributed Elsticsearch
-
-## Architecture
+# Elsticsearch Cluster
 
 - [node types](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html)
 
