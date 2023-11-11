@@ -6,3 +6,13 @@
 
   - Apache hadoop
   - Apache Spark
+
+- reverse proxy
+
+  - traefik
+  - api gateway
+  - nginx
+
+- hashicorp
+  - Vault: secret management
+  - consul: service discovery

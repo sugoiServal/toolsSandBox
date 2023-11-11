@@ -40,6 +40,8 @@ ctrl-d : add selection to next find match
 
 - `ctrl-w`, `ctrl-shift-w`: expand/shrink selection
 
+- `ctrl-p`: parameter reload info
+
 ### intellicence
 
 - iter - generate iteration

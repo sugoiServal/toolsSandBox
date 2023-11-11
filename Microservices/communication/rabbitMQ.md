@@ -1,2 +1,0 @@
-- [officialDocs](https://www.rabbitmq.com/getstarted.html)
-- [list of client](https://www.rabbitmq.com/getstarted.html)

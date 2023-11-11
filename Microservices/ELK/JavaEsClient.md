@@ -419,7 +419,16 @@ void testHighlighter() throws IOException {
 
 # Completion (suggestion)
 
-- 应用：搜索框自动补全 [](https://www.bilibili.com/video/BV1LQ4y127n4?p=131)
+- 应用：搜索框自动补全
+
+  - [1](https://www.bilibili.com/video/BV1LQ4y127n4?p=129)
+  - [2](https://www.bilibili.com/video/BV1LQ4y127n4?p=131)
+
+- logic:
+  - refactor mapping to include completion fields inside a suggestion field
+  - input in frontend search bar triggers a HTTP request to /suggestion?key="<prefix>"
+  - implement a controller to the endpoint which use a SuggestionService and return a list of suggetion Strings
+  - implemnet a SuggestionService which query ElasticSearch and get/parse the response to suggestion list
 
 ```java
 @Test
