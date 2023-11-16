@@ -28,6 +28,7 @@ message: "This is a 'quoted' value."
 boolVal: true
 nullVal: null
 age: 30
+date: 2018-02-17
 
 
 # List
