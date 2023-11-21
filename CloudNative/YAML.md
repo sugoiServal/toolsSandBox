@@ -37,6 +37,9 @@ fruits:
   - banana
   - orange
 
+# List: alternative
+fruits: [apple, banana, orange]
+
 # Map
 person:
   name: Alice

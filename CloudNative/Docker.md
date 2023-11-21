@@ -87,6 +87,11 @@ EXPOSE 4000
 
 # AFTER BUILD: command to run after the container loaded(runtime)
 CMD ["node", "app.js"]
+
+# use ENTRYPOINT: provide args in runtime
+  # docker run my-container 10  (over default 5s)
+ENTRYPOINT ["sleep"]  # process to run, but args is provided by docker run
+CMD ["5"]  # a default args
 ```
 
 - `.dockerignore`
