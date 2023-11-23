@@ -143,7 +143,7 @@ docker images
 # Deletion
 docker image rm image_name
 docker image rm -f image_name   # -f force remove in-use image
-docker system prune -a  # remove all images, containers and volumns
+docker system prune -a  # remove all images, containers and volumes
 ```
 
 ### Run Container
@@ -279,9 +279,22 @@ sudo docker run -d -p 3000:3000 $IMAGE_NAME:$IMAGE_TAG_FRONT
   - container's data lost when it shutdown. If it runs a database, that is disaster.
   - `volume` enable two-way sync between a `directory in the host machine` and `a directory in the container` (aka, mount a storage into container)
 
-- !! All volumes + data are managed by Docker inside the directory in host
+- named volume are stored in a directory in host
+
   - linux: `/var/lib/docker/volumes/`
   - wsl: `\\wsl.localhost\docker-desktop-data\data\docker\volumes`
+
+- 底层：
+  - `Storage Driver`: `Storage Driver` help manage physical storage for containers. `Storage Driver` is choices by docker based on their availability in your OS (AUFS, ZFS, Device Mapper...)
+  - `Volume Driver Plugins`: Volume driver plugins extend Docker's capabilities by allowing you to use different storage backends.
+    - `Local` (default): use storage in localhost
+    - third party drivers make it possible to use network storage providers
+
+```bash
+# volume driver
+docker volume create --driver=rexray/ebs myvolume
+docker run -it --name mysql --volume-driver rexray/s3fs -v s3-vol:/var/lib/mysql mysql
+```
 
 ```bash
 docker volume ls # list all volumes
@@ -297,13 +310,15 @@ docker volume prune
 
 ```bash
 # mount an anonymous volume, a volume will be automatically created with a random name
-docker run -v <containerDir> -d --name container1
+docker run -v /data/db --name container1 -d
 
-# mount a named volume. It will be created if not already created
-docker run -v mongo_data:/data/db -d --name container1
+# mount a named volume. a volume with the name will be created if not already created
+docker run -v mongo_data:/data/db --name container1 -d
 
 # bind an arbitrary path in host machine to a path in the container
-docker run -v /path/on/your/host:/data/db -d --name container1
+docker run -v /path/on/your/host:/data/db --name container1 -d
+
+# --mount is more verbose and preferred now to -v: https://docs.docker.com/storage/bind-mounts/
 ```
 
 ## Docker Network
