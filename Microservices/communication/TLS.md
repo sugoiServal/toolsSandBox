@@ -1,27 +1,37 @@
+- [udemy](https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/learn/lecture/14296090)
+- [bili](https://www.bilibili.com/video/BV1Qv41167ck?p=82)
+
 - TLS（Transport Layer Security）: 保障网络通信安全的协议
 
   - 主要应用背景: 客户端和服务器之间 HTTP 通信的加密传输。明文的 HTTP 请求、回应任何截取到的人都可以看得懂其中的内容。对於敏感的通信例如 bank, email 非常危险。
   - TLS 提供
-    - 加密通信(`Public-key cryptography algorithm: ECDSA, RSA`)：TLS 使用加密算法来保护数据在传输过程中的安全性。
-    - 身份验证(`Public-key cryptography algorithm: ECDSA, RSA`)：向客户端与服务器双方提供对方的身份认证，确保通讯过程中身份没有发生改变。
+    - 加密通信(`Asymmetric Encryption: ECDSA, RSA`)：TLS 使用加密算法来保护数据在传输过程中的安全性。
+    - 身份验证(`Certificate`)：向客户端与服务器双方提供对方的身份认证，确保通讯过程中身份没有发生改变。
     - 数据完整性保护 (`Hash Algorithm: SHA-256`)：防止数据在传输过程中被篡改。
 
 - related terms
 
+  - `port 443`: https coonnection use port 443
   - `SSL`: deprecated, TLS 是 SSL 的继任者. 现在说到 SSL 都是指代 TLS。
   - `HTTPs (HTTP secure)` 不是一个新的网络协议，是指 基于 TLS 建立的安全 HTTP 通信 (secure)
   - `HTTP/2 protocol` requires TLS
 
 - TLS 可以使用多种加密算法 for different purpose，具体使用哪些算法取决于协商双方的支持和配置。仅列出最常用的
 
-  - `Public-key cryptography algorithm（Asymmetric Encryption)`: can provide both `identity authentication` and `communication encryption`
-    - `ECDSA`(currently widely adopted), `RSA`(old technology, still widely used)
+  - `Asymmetric Encryption`: can provide both `identity authentication` and `communication encryption`
   - `Symmetric Encryption`: 非对称加密计算成本较高，通常会与对称加密结合使用, 在开始时 使用非对称加密进行对称加密的密钥交换，然后 使用对称加密算法加密实际的通信
-    - AES, 3DES
   - `Hash Algorithm`: ensure data integrity.
-    - SHA256
 
-# Symmetric Encryption
+### Encryption Algorithms
+
+- `Asymmetric Encryption`:
+  - `ECDSA`(currently widely adopted)
+  - `RSA`(old technology, still widely used)
+- `Symmetric Encryption`:
+  - AES (AES256),
+  - 3DES
+- `Hash Algorithm`
+  - SHA (SHA256)
 
 # Asymmetric Encryption (Public-key cryptography algorithm)
 
@@ -36,33 +46,97 @@
 
 - Asymmetric Encryption
 
-  - 服务器和用户分别生成自己的 `public key-private key pair`. says Server: privateS, publicS, Client: privateC, publicC
+  - 服务器和用户分别生加密的数据: privateS, publicS, Client: privateC, publicC
   - `public key exchange`: 服务器和用户交换 public key, 服务器得到 publicC。用户得到 publicS。
   - 用户到服务器的通信: 用户使用从服务器得到的 publicS 加密， 服务器使用自己雪藏的 privateS 解密
   - 服务器到用户的通信: 服务器使用从用户得到的 publicC 加密。用户使用自己雪藏的 privateC 解密
 
-- Asymmetric Encryption is not just used in TLS, also other applications: SSH, CryptoCurrency...
+- `public key-private key pair` notes
+  - 事实上，key pair 中的任何一方都可以用来加密数据。或者解密由另一方加密的数据
+  - key pair 也被应用于 SSH 上
 
-## TLS Certificate
+# TLS Certificate
 
-- 由第三方的认证机构（CA：Certificate Authority）向 business 提供的 Certificate，向用户证明通信的服务器属于这一个 business (provide identity)
-
-- Certificate include:
+- 由第三方的认证机构（CA：Certificate Authority）向 business 提供的 Certificate，向用户证明通信的服务器是可信的， 包括
 
   - `public key`
   - 服务提供商名，域名， 签发者信息（CA），签名算法 等等。
   - `signatured` by CA with hash algorithm like SHA256
 
-- 在 `public key exchange` 中， 服务器并不是只发送 public key，而是发送它的 TLS Certificate。用户通过 validate certification signature 来确定网站的主体是可信的
+- 在 `public key exchange` 中， 服务器不只是发送 public key，而是发送 Certificate (indludes public key). 用户端(例如 chrome)会 validate certification signature
 
-  - (所有浏览器都会有一个 certificate validation mechanism)
+- validation:
+  - CAs 有一个 private-public key pair
+  - CAs 使用 CA 私钥签署 certificate
+  - CAs 的 CA 公钥被 hard code 在所有浏览器/客户端里
+  - 浏览器使用 CA 公钥 validate 收到的 certificate 是由 CA 签发的
 
-- Certificate Signing Request(CSR): to request a Certificate from CA, by providing your public key and domain name
+### Certificate Signing Request(CSR)
 
-### CA validation
+- [csr](https://www.keyfactor.com/blog/what-is-a-certificate-signing-request-csr/)
 
-### Private CA
+- Certificate Signing Request(CSR) is a format(file) used to require TLS Certificate signing
 
-# In action
+  - 包含有关您的网站、服务、域名的信息： 名称、城市、州和国家/地区， 电子邮件地址，域名，子域名
+  - 包含 public-key, 以及密钥类型(RSA, ECDSA...)
+
+### Signers
+
+- `self-signed Certificate`: any one can sign, but not necessarily be trusted
+- `Public Certificate signed by CA`: for service available in the Internet
+- `Private Certificate signed by CA`: for services in company private network. CA institite helps setup a private CA service in a company.
+
+# In Action
+
+- `OpenSSL` is a open-source toolkit of the SSL and TLS protocols
+
+- file naming/ extensions:
+
+  - `.crt`, `.pem`: public key/certificate
+  - `.key`, `*key.pem`: private key
+
+- certificate:
+  - csr preparation:
+    - generate private key
+    - prepare business information
+    - generate and encode to a .csr file
+  - CA signature:
+    - provide .csr to a CA
+    - CA verify the CSR, sign a certificate and return a certificate `.crt`
+  - certificate installation
+    - install the .crt to your server, the process varies to different software/architectures
+
+```bash
+# Generate a RSA Private Key
+openssl genrsa -out private_key.pem 2048
+
+# Generate a Public Key from a Private Key
+openssl pkey -in private_key.pem -pubout -out public.pem
+
+# Generate a Certificate Signing Request (CSR) file, used to requesting an SSL/TLS certificate
+  # careful the input is private_key.pem, means that req command will create the public key for you
+openssl req -new -key private_key.pem -out mydomain.csr
+-subj "/C=US/O=MyOrg/CN=mydomain.com"
+
+# Generate a Self-Signed Certificate:
+openssl x509 -req -in mydomain.csr -out mydomain.crt -CA ca.crt -CAkey ca.key -CAcreateserial -days 3650
+
+# decode .crt to see certificate content
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+```
+
+- encryption/hash
+
+```bash
+# symmetric encrypt/decrypt with aes-256
+openssl enc -aes-256-cbc -salt -in plaintext.txt -out encrypted.txt
+openssl enc -aes-256-cbc -d -in encrypted.txt -out decrypted.txt
+
+# hash function with md5
+openssl md5 filename.txt
+
+# test an SSL/TLS connection to a server
+openssl s_client -connect example.com:443
+```
 
 - private key location depends on os, Linux common directories include "/etc/ssl/private/" or "~/.ssl/".
