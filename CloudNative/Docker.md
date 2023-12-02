@@ -328,24 +328,28 @@ docker run -v /path/on/your/host:/data/db --name container1 -d
   - default one is `Bridge Driver`
 - [read](https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach)
 
+- Networks Driver modes
+
+  - `bridge`(default): creates an internal private network in host (use namespace)
+    - Containers can communicate with each other in the Bridge Network
+    - Containers can communicate with the host machine
+    - Containers are published to external newtorks through port mapping
+  - `None`: disabling container's network. container is unreachable
+  - `Host`: the container shares the host's network (as if it is a process). Port exposed by container must be available in the host. Container network is not isolated.
+  - `Overlay`: creates a distributed network able to span multiple hosts.
+  - Macvlan Network
+  - IPvlan
+
 ```bash
 docker network ls  # list all networks
 docker network rm elk-net  # remove a network
-```
 
-- `Bridge Driver` (default): creates an internal network within a single host
-  - Containers can communicate with each other in the Bridge Network
-  - Containers can communicate with the host machine
-  - Containers are isolated from external newtorks unless specific ports are exposed
-
-```bash
 docker network create my_bridge_network
 docker run -d --name container1 --network my_bridge_network nginx
 docker run -d --name container2 --network my_bridge_network nginx
 ```
 
-- Containers Communication on the same Network
-  - Once the containers are on the same network, you can access one container from another using the `container name as the hostname`
+- In bridge network, you can access one container from another using the `container name as the hostname`
 
 ```python
 # part of container1's code
@@ -353,14 +357,12 @@ docker run -d --name container2 --network my_bridge_network nginx
 db_connection_string = "mysql://username:password@container2:3306/database"
 ```
 
-### Other Networks Driver modes
-
-- `None`: isolates a container by disabling its network.
-- `Host Driver`: allows the container to share the network stack of the host system
-- `Overlay Driver`: creates a distributed network able to span multiple hosts.
-- Overlay Network
-- Macvlan Network
-- IPvlan
+- Bridge Network
+  - Bridge Network is implemented with namespace,
+    - a bridge network in docker is a `linux bridge`, act as a virtual switch for containers in the bridge network
+    - each container in bridge network is essentially a namespace, has a ip assigned in the virtual network
+    - docker create virtual cable(pipeline) to enable communication between containers in the network
+    - Containers are published to external newtorks through port mapping
 
 # docker-compose
 
@@ -439,7 +441,7 @@ docker-compose down
 docker-compose down --rmi all -v # these options remove images/volumns as well
 ```
 
-### Network:
+### docker-compose Network:
 
 - [docs](https://docs.docker.com/compose/networking/)
 - `By default` Compose sets up a single network for your app. Each container for a service joins the default network and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the container name.
