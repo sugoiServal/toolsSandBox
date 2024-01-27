@@ -1,0 +1,3 @@
+- Choosing deploy to VM/Container
+- What to consider when choosing a database
+- Streaming and MessageQueue
