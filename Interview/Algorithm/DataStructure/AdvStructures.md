@@ -1,3 +1,107 @@
+# Union Find
+
+<!-- [ref](https://labuladong.github.io/algo/di-yi-zhan-da78c/shou-ba-sh-03a72/bing-cha-j-323f3/) -->
+
+- Given a graph of n nodes, there are a number of `connected components, CC` (aka sub graphs that does not connecte to each other)
+
+- For any two nodes in a graph, `isConnected` relation property:
+  - `p.isConnected(p)` is true
+  - `p.isConnected(q) <=> q.isConnected(p)`, and p, q belongs to the same CC
+  - if `a.isConnected(b) && b.isConnected(c) => a.isConnected(c)` is true
+  -
+
+```go
+// apis
+type UnionFind struct {
+    // connect node p and node q
+    func union(p int, q int)
+    // determine if node p and node q are connected
+    func isConnected(p int, q int) bool
+    // return number of connected components
+    func count() int
+}
+```
+
+- implementation: trees (forest):
+
+  - each connected component is represented by a tree
+  - root of each tree points to itself, node inside the tree points to its parent
+  - `findRoot(p)` root of node p by traverse through parent pointer to the root
+  - if findRoot(p) == findRoot(q), node q, p are connected. And we can `union()` by modify the two roots
+  - route compression: when `findRoot()` the root of any node, point all nodes along the route to the root of the tree, so that the height of the tree is minimized
+
+- findRoot(): O(1) for already compressed node, O(logn) for balanced tree, or O(n) worst case
+- union(): O(1) for already compressed node, otherwise equals to time of findRoot()
+- isConnected(): O(1) for already compressed node, otherwise equals to time of findRoot()
+- count(): O(1)
+
+```java
+class UnionFind {
+    private int count;  // # of connect components
+    private int[] parent;  // store parent node of each nodes
+
+    // 1. constructor: initialize unionFind of n nodes, O(n)
+    // initially each node points to itself
+    public UnionFind(int n) {
+        this.count = n;
+        this.parent = new int[n];
+        for (int i = 0; i < n; i++) {
+            this.parent[i] = i;
+        }
+    }
+
+    // 2. return root of any node, while compress the route to height of 1,
+    // O(1) if alreay compressed, O(logn) for balanced tree, O(n) worst case
+    // implement: recursively linked list traversal, while compress the tree
+    public int findRoot(int x) {
+        if (parent[x] != x) {             //!!!
+            root = findRoot(parent[x])
+            parent[x] = root;  //!!!
+        }
+        return parent[x];
+    }
+
+    // 3. connect node p and node q,
+    // time equals to findRoot()
+    public void union(int p, int q) {
+        int rootP = findRoot(p);
+        int rootQ = findRoot(q);
+
+        if (rootP != rootQ) {
+          // make tree(rootQ) to be a child of rootP
+          parent[rootQ] = rootP;
+          count--;
+        }
+    }
+
+    // 4. determine if node p and node q are connected:
+    // time equals to findRoot()
+    public boolean isConnected(int p, int q) {
+        int rootP = findRoot(p);
+        int rootQ = findRoot(q);
+        return rootP == rootQ;
+    }
+
+    // 5. return # of CC: O(1)
+    public int count() {
+        return count;
+    }
+}
+```
+
+# Trie (Prefix Tree)
+
+<!-- - ref https://labuladong.github.io/algo/di-yi-zhan-da78c/shou-ba-sh-daeca/qian-zhui--46e56/ -->
+
+- A trie (pronounced as "try") or prefix tree is
+  - a tree data structure, used to efficiently store string key-value pairs
+  - similar to hashmap, where keys are strings, value can be any type
+
+```go
+
+
+```
+
 # Heap
 
 - heap: tree with constrain of:

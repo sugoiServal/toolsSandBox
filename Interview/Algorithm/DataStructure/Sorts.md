@@ -1,120 +1,4 @@
-# insertion sort (O(n^2))
-
-## type: brute force
-
-- 将链表划分为 2 块，前半为有序区后半为无序区。算法的目的是由初始：len==1 增长有序区，每次从无序区添加一个 element 将它插入到有序区中正确的位置。
-
-```js
-insertion sort()
-    for: D[i], i == 2 to D.len
-        将D[i]插入到有序区中正确的位置()
-```
-
-- 将 D[i]插入到有序区中正确的位置(), 是通过将 D[i]与之前有序区的, 由大到小每一个 Element 进行比较。如有序区中比较对象较大，将该对象向右移一位。停止条件：D[i]正确的位置找到（aka 序区中比较对象较小）。之后将 D[i]插入正确的位置
-
-```js
-将D[i]插入到有序区中正确的位置()
-    for: D[j], j == i-1 to 0
-        terminate when:
-            D[j] <= D[i]
-            OR j == 0
-        move value of D[j] to D[j+1]
-    set D[j+1] to D[i]
-```
-
-```java
-// Java program for implementation of Insertion Sort
-public class InsertionSort {
-	/*Function to sort array using insertion sort*/
-	void sort(int arr[])
-	{
-		int n = arr.length;
-		for (int i = 1; i < n; ++i) {
-			int key = arr[i];
-			int j = i - 1;
-
-			/* Move elements of arr[0..i-1], that are
-			greater than key, to one position ahead
-			of their current position */
-			while (j >= 0 && arr[j] > key) {
-				arr[j + 1] = arr[j];
-				j = j - 1;
-			}
-			arr[j + 1] = key;
-		}
-	}
-};
-```
-
-# mergeSort()
-
-## type: Divide n Conquer
-
-- divide：divide probem by two half (left L1/right L2)
-- conquer:
-  - mergeSort(L1)
-  - mergeSort(L2)
-- Operation:
-  - merge(L1, L2)
-
-## 算法
-
-```py
-# also leetCode [21]
-from math import floor
-def mergeTwoSortedList(L1, L2):
-
-  # 2个指针分别指向2个数组头，
-  # 每次向output里面插入2个中较小的一个argmin， 并移动argmin的指针
-  # 如果其中一个指针遍历完了就把另一个指针剩下的元素全部插入到output中
-
-    p1 = p2 = 0
-    output = []
-    while (p1 < len(L1) and p2 < len(L2)):
-        if (L1[p1] <= L2[p2]):
-            output.append(L1[p1])
-            p1+=1
-        else:
-            output.append(L2[p2])
-            p2+=1
-    if (p1 == len(L1)):
-        output.extend(L2[p2:len(L2)])
-    elif (p2 == len(L2)):
-        output.extend(L1[p1:len(L1)])
-    return output
-
-def mergeSort(L):
-    # unit case
-    if(len(L)<=1): return L
-
-    # divide
-    mid = floor((0+len(L)-1)/2)
-    L1 = L[0:mid+1]
-    L2 = L[mid+1:len(L)]
-
-    # conquer sub problem
-    L1 = mergeSort(L1)
-    L2 = mergeSort(L2)
-
-    # combine solution
-    L = mergeTwoSortedList(L1, L2)
-    return L
-```
-
-## complexity
-
-- mergeTwoSortedList(): O(n)
-- mergeSort(): T(n)
-  - T(n) = 2T(n/2) + O(n)
-  - ==> O(nlogn)
-- Auxiliary Space: O(n)
-- not in-place
-
-# heapSort()
-
-see [here](../DataStructure/AdvStructures.md#Heap)
-
-# QuickSort(), in-place, average O(nlogn)
+# quickSort(), in-place, average O(nlogn)
 
 ### QuickSort(A, left, right)
 
@@ -168,3 +52,108 @@ QuickSort(A, 0, len(A)-1)
 最差 O(n^2)
 平均 O(nlogn)
 空间 O(1)
+
+# mergeSort(), not in-place, O(nlogn)
+
+- divide：divide probem by two half (left L1/right L2)
+- conquer:
+  - mergeSort(L1)
+  - mergeSort(L2)
+- Operation:
+
+  - merge(L1, L2)
+
+- T(n) = 2T(n/2) + O(n) ==> O(nlogn)
+- Auxiliary Space: O(n)
+
+```py
+# also leetCode [21]
+from math import floor
+def mergeTwoSortedList(L1, L2):
+
+  # 2个指针分别指向2个数组头，
+  # 每次向output里面插入2个中较小的一个argmin， 并移动argmin的指针
+  # 如果其中一个指针遍历完了就把另一个指针剩下的元素全部插入到output中
+
+    p1 = p2 = 0
+    output = []
+    while (p1 < len(L1) and p2 < len(L2)):
+        if (L1[p1] <= L2[p2]):
+            output.append(L1[p1])
+            p1+=1
+        else:
+            output.append(L2[p2])
+            p2+=1
+    if (p1 == len(L1)):
+        output.extend(L2[p2:len(L2)])
+    elif (p2 == len(L2)):
+        output.extend(L1[p1:len(L1)])
+    return output
+
+def mergeSort(L):
+    # unit case
+    if(len(L)<=1): return L
+
+    # divide
+    mid = floor((0+len(L)-1)/2)
+    L1 = L[0:mid+1]
+    L2 = L[mid+1:len(L)]
+
+    # conquer sub problem
+    L1 = mergeSort(L1)
+    L2 = mergeSort(L2)
+
+    # combine solution
+    L = mergeTwoSortedList(L1, L2)
+    return L
+```
+
+# insertion sort (O(n^2)): brute force
+
+- 将链表划分为 2 块，前半为有序区后半为无序区。算法的目的是由初始：len==1 增长有序区，每次从无序区添加一个 element 将它插入到有序区中正确的位置。
+
+```js
+insertion sort()
+    for: D[i], i == 2 to D.len
+        将D[i]插入到有序区中正确的位置()
+```
+
+- 将 D[i]插入到有序区中正确的位置(), 是通过将 D[i]与之前有序区的, 由大到小每一个 Element 进行比较。如有序区中比较对象较大，将该对象向右移一位。停止条件：D[i]正确的位置找到（aka 序区中比较对象较小）。之后将 D[i]插入正确的位置
+
+```js
+将D[i]插入到有序区中正确的位置()
+    for: D[j], j == i-1 to 0
+        terminate when:
+            D[j] <= D[i]
+            OR j == 0
+        move value of D[j] to D[j+1]
+    set D[j+1] to D[i]
+```
+
+```java
+// Java program for implementation of Insertion Sort
+public class InsertionSort {
+	/*Function to sort array using insertion sort*/
+	void sort(int arr[])
+	{
+		int n = arr.length;
+		for (int i = 1; i < n; ++i) {
+			int key = arr[i];
+			int j = i - 1;
+
+			/* Move elements of arr[0..i-1], that are
+			greater than key, to one position ahead
+			of their current position */
+			while (j >= 0 && arr[j] > key) {
+				arr[j + 1] = arr[j];
+				j = j - 1;
+			}
+			arr[j + 1] = key;
+		}
+	}
+};
+```
+
+# heapSort()
+
+see [here](../DataStructure/AdvStructures.md#Heap)

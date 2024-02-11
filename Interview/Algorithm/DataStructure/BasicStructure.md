@@ -137,7 +137,18 @@ for left <= right {
 }
 ```
 
+### Interval Problems
+
+- Interval Problems can usually be solved with sorting, or a Greedy algorithm
+- two tricks:
+  - sort interval array by start_i, secondary sort by end_i
+  - draw and determine difference possible ways of interval overlapping
+
 # Binary Tree
+
+- tree facts
+  - tree and graph difference: tree does not contain cycles
+  - depth of binary tree: O(logn) for balanced trees, O(n) worst case
 
 ```go
 type TreeNode struct {
@@ -253,6 +264,13 @@ func traverse(root *TreeNode) {
   - two strings (common subsequence, edit distance...), s1[i:], s2[j:]
   - two pointers (PalindromeSubseq...), s[start: end]
 
+### Greedy problems
+
+- Greedy Problems are special case DP problems:
+
+  - reduce the time complexity
+  - only for problems that satisfy property: local optimal lead to global optimal
+
 # Backtracking
 
 - `backtracking` is DFS over `choice set` -- a `pruned state space`
@@ -310,9 +328,273 @@ func backtrack(start, subset) {
 }
 ```
 
+### Permutations
+
 # Graph
 
-- visited
+- two implementations to graph (for avoiding repeated storage)
+  - `adjacent list`: more space friendly for sparse graphs
+    - more frequently seen in algorithm problems
+  - `adjacent matrix`: not efficient for sparse graph (always `n*n` space),
+    - pro 1: can know if i and j are connect in O(1)
+    - pro 2: in graph theory some graph properties can be calculated through matrix arithmetic
+
+```go
+// 图节点的逻辑结构
+type Vertex struct {
+    id        int
+    neighbors []*Vertex
+}
+
+// adjacent list: n*? for n vertex
+// graph[i] store all neighbors of vertex i
+var graph [][]int
+
+// adjacent matrix: n*n for n vertex
+// if vertex i connects to vertex j, matrix[i][j] = true
+var matrix [][]bool
+```
+
+### DFS, BFS
+
+- graph `traverse`: DFS, BFS + visited. O(n)
+
+  - since graph typically contains cycles (you will go back to where you started), graph traverse need to `record visited`
+
+```go
+// - DFS of graph -
+// https://labuladong.github.io/algo/images/%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91/1.gif
+
+// vertex that has been visited (alt: hashmap)
+var visited []bool
+
+// simulate traverse logic (eg. cycle detection, track paths)
+var onPath []bool
+
+func traverse(graph Graph, s int) {
+    // mark visited
+    visited[s] = true
+
+    // traverse logic
+    onPath[s] = true
+
+    for _, neighbor := range graph.neighbors(s) {
+        if !visited[s]: traverse(graph, neighbor)
+    }
+    // undo travserse logic if necessary
+    onPath[s] = false
+}
+```
+
+- BFS: Queue TBD
+
+## Cycle detection:
+
+- based on DFS + trace, O(V+E)
+- based on Union Find
+
+### based on DFS + trace, O(V+E)
+
+- use hashset or []bool `trace` to record nodes alone the visit trace: add at preorder, remove at postorder.
+
+  - If a current node is already in `trace`, there is a cycle.
+
+- use `visited` to reduce redundant traversal: when a DFS(node), we mark it as visited and next time we can skip it when visit it again
+
+```go
+func detectCycle(graph [][]int, node int, trace []bool, visited []bool) bool {
+	// if a node is seen before, there is a cycle
+	if trace[node] {
+		return true
+	}
+
+	// skip node that has been DFS, and apparently doesn't detected a cycle
+	if visited[node] {
+		return false
+	}
+
+	// preorder
+	trace[node] = true
+	visited[node] = true
+	for _, neighbor := range graph[node] {
+		if detectCycle(graph, neighbor, trace, visited) {
+			return true
+		}
+	}
+	trace[node] = false
+	return false
+}
+```
+
+### based on Union Find
+
+- `O(E * α(V))`, where α is the inverse Ackermann function, which grows very slowly.
+- algorithm
+  - add all node to Union Find data structure
+  - for each edge,
+    - check if the two nodes are already in the same Connect Component, if so, return true
+    - otherwise connect the two nodes
+
+## Topological Sort: based on DFS
+
+- problem description
+
+  - given a DAG, flatten it so that every edge is from left to right. Then the node order is topological sorted.
+  - the order such that every nodes a node depends on must be traversed before the node.
+
+- solution
+  - `A cyclic graph cannot be topological sorted`. A DAG must be able to be topological sorted.
+  - 1. `traverse the graph in postorder. 2. reverse the postorder traverse result` => topological sorted result.
+
+```go
+// reuse cycle detection algorithm, and add the postorder record
+postorder = []int
+for node in graph.nodes():
+    if detectCycleAndSort(node, postorder, trace, visited) {
+      return []int{}
+    }
+return reverse(postorder)
+
+
+func detectCycleAndSort(node, postorder []int, trace []bool, visited []bool) bool {
+	// if a node is seen before, there is a cycle
+	if trace[node]: return true
+
+	// skip node that has been DFS, and apparently doesn't detected a cycle
+	if visited[node]: return false
+
+	// preorder
+	trace[node] = true
+	visited[node] = true
+	for neighbor in node.neighbors() {
+		if detectCycle(neighbor, trace, visited) {
+			return true
+		}
+	}
+  // postorder add the node to answer: postorder
+  postorder.append(node)
+	trace[node] = false
+	return false
+}
+```
+
+### Union Find [ref](https://labuladong.github.io/algo/di-yi-zhan-da78c/shou-ba-sh-03a72/bing-cha-j-323f3/)
+
+- Given a graph of n nodes, there are a number of `connected components, CC` (aka sub graphs that does not connecte to each other)
+
+- For any two nodes in a graph, `isConnected` relation property:
+  - `p.isConnected(p)` is true
+  - `p.isConnected(q) <=> q.isConnected(p)`, and p, q belongs to the same CC
+  - if `a.isConnected(b) && b.isConnected(c) => a.isConnected(c)` is true
+  -
+
+```go
+// apis
+type UnionFind struct {
+    // connect node p and node q
+    func union(p int, q int)
+    // determine if node p and node q are connected
+    func isConnected(p int, q int) bool
+    // return number of connected components
+    func count() int
+}
+```
+
+- implementation: trees (forest):
+
+  - each connected component is represented by a tree
+  - root of each tree points to itself, node inside the tree points to its parent
+  - `findRoot(p)` root of node p by traverse through parent pointer to the root
+  - if findRoot(p) == findRoot(q), node q, p are connected. And we can `union()` by modify the two roots
+  - route compression: when `findRoot()` the root of any node, point all nodes along the route to the root of the tree, so that the height of the tree is minimized
+
+- findRoot(): O(1) for already compressed node, O(logn) for balanced tree, or O(n) worst case
+- union(): O(1) for already compressed node, otherwise equals to time of findRoot()
+- isConnected(): O(1) for already compressed node, otherwise equals to time of findRoot()
+- count(): O(1)
+
+```java
+class UnionFind {
+    private int count;  // # of connect components
+    private int[] parent;  // store parent node of each nodes
+
+    // 1. constructor: initialize unionFind of n nodes, O(n)
+    // initially each node points to itself
+    public UnionFind(int n) {
+        this.count = n;
+        this.parent = new int[n];
+        for (int i = 0; i < n; i++) {
+            this.parent[i] = i;
+        }
+    }
+
+    // 2. return root of any node, while compress the route to height of 1,
+    // O(1) if alreay compressed, O(logn) for balanced tree, O(n) worst case
+    // implement: recursively linked list traversal, while compress the tree
+    public int findRoot(int x) {
+        if (parent[x] != x) {             //!!!
+            root = findRoot(parent[x])
+            parent[x] = root;  //!!!
+        }
+        return parent[x];
+    }
+
+    // 3. connect node p and node q,
+    // time equals to findRoot()
+    public void union(int p, int q) {
+        int rootP = findRoot(p);
+        int rootQ = findRoot(q);
+
+        if (rootP != rootQ) {
+          // make tree(rootQ) to be a child of rootP
+          parent[rootQ] = rootP;
+          count--;
+        }
+    }
+
+    // 4. determine if node p and node q are connected:
+    // time equals to findRoot()
+    public boolean isConnected(int p, int q) {
+        int rootP = findRoot(p);
+        int rootQ = findRoot(q);
+        return rootP == rootQ;
+    }
+
+    // 5. return # of CC: O(1)
+    public int count() {
+        return count;
+    }
+}
+```
+
+## Minimum Spanning Tree
+
+- Minimum Spanning Tree
+
+  - given an connected graph with weighted edges, and might contains cycles
+  - generate a tree from a` subset of edges` in a graph, and `all nodes`, such that the `sum(weight(edge)) in the tree is minimized`
+  - note that tree := a connected graph containing no cycles
+
+- algorithms: Prim/ Kruskal
+
+### Kruskal algorithm (Minimum Spanning Tree): Union find + Greedy
+
+- Kruskal: Union find + Greedy algorithm:
+
+```go
+// Input: edges, nodes
+unionFind.add(nodes)
+edges.sort()
+mstWeight = 0
+for edge in edges {
+  if unionFind.isConnected(edge.node1, edge.node2): continue
+  else:
+    unionFind.union(edge.node1, edge.node2)
+    mstWeight+=edge.weight
+}
+```
+
+### Dijkstra
 
 # misc
 

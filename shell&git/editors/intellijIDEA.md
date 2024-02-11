@@ -1,3 +1,9 @@
+```bash
+#.bashrc
+alias idea='/opt/idea-IC-232.10072.27/bin/idea.sh'
+alias ideacd='pwd | xargs /opt/idea-IC-232.10072.27/bin/idea.sh'
+```
+
 - most used shortcuts: https://www.youtube.com/watch?v=QYO5_riePOQ
 - debugger: https://www.youtube.com/watch?v=lAWnIP1S6UA
 
