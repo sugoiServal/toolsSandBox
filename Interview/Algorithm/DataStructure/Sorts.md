@@ -108,6 +108,38 @@ def mergeSort(L):
     return L
 ```
 
+# Bucket sort O(n + k), O(n)
+
+- think a Bar chart.
+
+  - Use an array `buckets` to store expandable lists, of elements in an interval (eg, for positive integer sort, buckets[0] for inteval (1,1), buckets[1] for (2,2),... buckets[100] for (99,99)),
+  - then iterate over the input array and append element to the intervals's end (O(1))
+  - finally append all non-empty arrays in `buckets` follow the index sequence
+
+- key is to determine the number of buckets
+
+- Bucket sort is most effective when the input is uniformly distributed over a range. It has a time complexity of O(n + k) and Space complexity of O(n). n is input size and k is the number of buckets.
+
+```go
+// A contain natural numbers
+bucketSort(array A):
+
+  // Determine the number of buckets
+  num_buckets = max(A) - min(A) + 1
+
+  // Create an array of empty buckets
+  buckets = make([][]int, num_buckets)
+
+  // Distribute elements into buckets
+  for i from 0 to n - 1:
+      buckets[A[i] - min_val].append(A[i])
+
+  // Concatenate the sorted buckets to obtain the sorted array
+  sorted_array = []int
+  for i from 0 to num_buckets - 1:
+      sorted_array.append(buckets[i])
+```
+
 # insertion sort (O(n^2)): brute force
 
 - 将链表划分为 2 块，前半为有序区后半为无序区。算法的目的是由初始：len==1 增长有序区，每次从无序区添加一个 element 将它插入到有序区中正确的位置。

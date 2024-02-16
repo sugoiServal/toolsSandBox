@@ -91,143 +91,301 @@ class UnionFind {
 
 # Trie (Prefix Tree)
 
-<!-- - ref https://labuladong.github.io/algo/di-yi-zhan-da78c/shou-ba-sh-daeca/qian-zhui--46e56/ -->
+- A `trie` (pronounced as "try") or prefix tree is
 
-- A trie (pronounced as "try") or prefix tree is
-  - a tree data structure, used to efficiently store string key-value pairs
-  - similar to hashmap, where keys are strings, value can be any type
+  - a `tree` data structure. `Node{char, isEndofWord, childNodes}`
+  - efficiently check if a string is a prefix of another string, or get a list of strings with a prefix.
+  - various applications such as autocomplete and spellchecker.
+
+- apis
 
 ```go
+type TrieNode struct {
+	Children map[byte]*TrieNode
+	isEndOfWord    bool
+}
+
+type Trie struct {
+	Start *TrieNode
+}
 
 
+// Initializes the trie object.
+Trie() Trie:
+
+// Inserts the string word into the trie.
+addWord(String word):
+
+// delete a word from trie
+deleteWord(String word):
+
+// Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise.
+search(String word) bool:
+
+// Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.
+isPrefix(String prefix) bool
+
+// Returns true if the string word is in the trie. Word may contain dots '.' where dots can be matched with any letter.
+searchFuzzy(String word) bool
+
+// Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.
+isPrefixFuzzy(String prefix) bool
+```
+
+- implemetation: traverse
+- ref:
+  - [211.design-add-and-search-words-data-structure](https://github.com/sugoiServal/leetCode/blob/master/LeetCode_Go/dataStructures/211.design-add-and-search-words-data-structure.go)
+  - [208.implement-trie-prefix-tree.go](https://github.com/sugoiServal/leetCode/blob/master/LeetCode_Go/dataStructures/208.implement-trie-prefix-tree.go)
+
+```go
+func Constructor() Trie {
+	return Trie{
+		Start: &TrieNode{
+			Children: make(map[byte]*TrieNode),
+			isEnd:    false,
+		},
+	}
+}
+
+// Inserts the string word into the trie.
+func (this *Trie) addWord(word string) {
+	curNode := this.Start
+	for i, _ := range word {
+		char := word[i]
+
+		if child, exists := curNode.Children[char]; !exists {
+			newNode := &TrieNode{
+				Children: make(map[byte]*TrieNode),
+			}
+			curNode.Children[char] = newNode
+			curNode = newNode
+		} else {
+			curNode = child
+		}
+	}
+	curNode.isEnd = true
+}
+
+// delete a word from trie
+
+func (this *Trie) deleteWord(word string) {
+	curNode := this.Start
+	nodeStack := []*TrieNode{}
+	charStack := []byte{}
+
+	// Step 1: Traverse the tree to find the word
+	for i, _ := range word {
+		char := word[i]
+		if _, exist := curNode.Children[char]; !exist { // word not in trie
+			return
+		}
+		nodeStack = append(nodeStack, curNode)
+		charStack = append(charStack, char)
+		curNode = curNode.Children[char]
+	}
+
+	if !curNode.IsEndOfWord { // word not in trie
+		return
+	}
+
+	// Step 2: delete the word: delete all leaf && non-end nodes from the stack
+	curNode.IsEndOfWord = false // Mark the last node as not end of word
+	for len(nodeStack) > 0 {
+		// pop stacks
+		parentNode := nodeStack[len(nodeStack)-1]
+		delChar := charStack[len(charStack)-1]
+		nodeStack = nodeStack[:len(nodeStack)-1]
+		charStack = charStack[:len(charStack)-1]
+
+		delNode := parentNode.Children[delChar]
+		if len(delNode.Children) > 0 || delNode.IsEndOfWord {
+			break
+		}
+		delete(parentNode.Children, delChar)
+	}
+
+}
+
+// Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise.
+func (this *Trie) Search(word string) bool {
+	curNode := this.Start
+
+	for i, _ := range word {
+		char := word[i]
+		if child, exists := curNode.Children[char]; exists {
+			curNode = child
+		} else {
+			return false
+		}
+	}
+	return curNode.isEnd
+}
+
+// Returns true if the string word is in the trie. Word may contain dots '.' where dots can be matched with any letter.
+func (this *Trie) searchFuzzy(word string) bool {
+	var dfs func(curNode *TrieNode, word *string, start int) bool
+	dfs = func(curNode *TrieNode, word *string, start int) bool {
+		for i := start; i < len(*word); i++ {
+			char := (*word)[i]
+			if char == '.' {
+				for _, node := range curNode.Children {
+					if dfs(node, word, i+1) {
+						return true
+					}
+				}
+				return false
+			}
+
+			if child, exists := curNode.Children[char]; exists {
+				curNode = child
+			} else {
+				return false
+			}
+		}
+		return curNode.IsEndOfWord
+	}
+	node := this.Start
+	return dfs(node, &word, 0)
+}
+
+// Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.
+func (this *Trie) isPrefix(prefix string) bool {
+	curNode := this.Start
+
+	for i, _ := range prefix {
+		char := prefix[i]
+		if child, exists := curNode.Children[char]; exists {
+			curNode = child
+		} else {
+			return false
+		}
+	}
+	return true
+}
 ```
 
 # Heap
 
-- heap: tree with constrain of:
-  - max heap:
-    - Constraints: parent > child
-    - 堆顶的元素必须是数组中的 argmax
-  - min heap:
-    - Constraints: child > parent
-    - 堆顶的元素必须是数组中的 argmin
-- binary heap: heap but complete binary tree
+- `heap`: complete binary with constraints, capably to get max/min value in O(logn)
 
-- implementation dataStruct: list  
-  ![](https://imgur.com/MEFttfJ.jpg) - 这样储存的好处是任何一个节点都可以通过数组的 index 计算得到(因为是完全二叉树) - 例如: - 1 的 children: 1\*2， 1\*2+1； - 3 的 children: 3\*2， 3\*2+1
+  - `max heap`: parent > child, heap top element (aka root) is always the maximum
+  - `min heap`: child > parent, heap top element (aka root) is always the minimal (similar, not discuss below)
 
-## functions:
+- `Priority Queue`: an abstract data type (ADT), such that each data has a priority, and elements with higher priority are dequeued before elements with lower priority.
 
-- maxHeapify(): O(logn) 通过下沉根节点维护 maxHeap 的性质
-- changeHeapValue(k, val):O(logn) 改变任意节点 k 的值，同时维护 maxHeap 的性质
-- buildMaxHeap():O(n) 从无序数组中建立 maxHeap
+  - can be implemented with max heap
 
-### maxHeapify(), O(logn):
+- APIs
+  - sink: recursive going down with choose: the larger subtree
+  - float: iteratively going up
+  - `insert at the end` and float
+  - `pop/pull at the top` and use the last element to sink
 
-- input: 根节点为 i 的 binary tree
-- 假定根节点为 i, 根节点不满足 Heap constraint
-- 假定根节点的 left Subtree 和 right Subtree 都是 maxHeap,
-- 目的: 让根节点 i 下沉到合适的位置使整个二叉树满足 Heap constraint
-- 算法
+```go
+// O(n): build Priority Queue from unsorted array
+buildMaxHeap(arr):
 
-```py
-def maxHeapify(Btree(i)):
+// O(logn): if the root `n` is not the max in a tree, sink it to the right position
+sink(n):
 
-  l = child(i)[0]
-  r = child(i)[1]  # Btree(l)和Btree(r)都应该是heap
-  if (i > l and i > r): return
-  else:
-    swap (i, argmax(l, r))  # 将根结点与左右子树中最大的一个树根交换(如果i自己并不是最大的)
-    maxHeapify(Btree(i))  # 在交换后的以i为根结点的子树上递归调用maxHeapify (这个子树heap性质可能被破坏)
+// O(logn): if a node `n` is greater than its parents, float it to the right position
+float(n):
 
+// O(logn): insert a new node to priority queue
+insert(val)
+
+// O(logn): pull max from priority queue
+pullMax()
 ```
 
-### buildMaxHeap():O(n)
+- implementation:
+  - as a complete binary tree, use an array `heap` to store the `tree's BFS sequence` => we can find parent or children of a node in O(1)
+  - n's children: `n*2`， `n*2+1`
+  - n's parents: `floor(n/2)`
 
-- input: random array of size n. A:n
-- 算法：
+![](https://imgur.com/MEFttfJ.jpg)
 
-```py
-def buildMaxHeap(A):
-  for i = floor(n/2) down to 1:
-    maxHeapify(Btree(i))
+```go
+// O(1) get parent, left/right child of a node
+n.Parent(): return n/2    // n is int
+n.Left(): return n*2
+n.Right(): return n*2+1
+
+
+// O(logn): if the root `n` is not the max in a tree, sink it to the right position
+  // 1.if root is not the argmax(root, root.left, root.right), find the larger among the three and swap with root
+  // 2.recursive sink the swapped position
+
+sink(root, heap) {
+  if heap[root.Left] < heap[root] && heap[root.Right] < heap[root]: return // already satisfied max heap
+  else {
+    newRoot = root.Left if heap[root.Left] > heap[root.Right] else root.Right
+    swap(heap[newRoot], heap[root])
+    sink(newRoot, heap)
+  }
+}
+
+// O(logn): if a node `n` is greater than its parents, float it to the right position
+  // iteratively swap the node with its parent until its parent is greater than it
+
+float(node, heap) {
+  for heap[node.Parent] < heap[node] {
+    swap(heap[node.Parent], heap[node])
+    node = node.Parent
+  }
+}
+
+// O(logn): insert a new node to priority queue
+  // append the new node to the priority queue (at the end), then float it to the correct position
+insert(val, heap) {
+  heap.append(val)
+  newNode = len(heap)-1
+  float(newNode, heap)
+}
+
+// O(logn): pull max from priority queue
+  // get the max value from heap top: heap[0]
+  // delete the last node and assign its value to the root position
+  // sink(root, heap)
+pullMax(heap) {
+  max = heap[0]
+  heap[0] = heap[len(heap)-1]  // reassign heap top with the heap bottom's value
+  heap = heap[:len(heap)-1]  // delete the last node
+  sink(0, heap)
+  return max
+}
+
+// O(n): build Priority Queue from unsorted array
+// implement 1
+buildMaxHeap(array) {
+    for i from len(array)/2 to 1 {
+      sink(i, array)
+    }
+    return array
+}
+
+// implement 2
+buildMaxHeap(array) {
+    heap = []
+    for num in array {
+      insert(num, heap)
+    }
+    return heap
+}
 ```
 
-### changeHeapValue(k, val):O(logn)
+- bouns: heapSort(): O(nlogn)
+  - inplace O(nlogn) sorting algorithm
 
-- input: 根节点为 i 的 heap A, 节点 k 以及要更改的值 val
-- output: 更改 K 的值并且维护 heap 的性质
-- 假定 val 总是非减的，即总是正数
-- 因为 heap 中结点 K 增大了需要将结点 K 上浮到正确的位置
-
-```py
-def changeHeapValue(A, k, val):
-  A[k] = A[k]+val
-  parent = parent(k)
-  while A[parent] < A[k]:
-    swap(A[k], A[parent])
-    parent = parent(k)
-```
-
-## application:
-
-- heapSort(): O(nlogn)时间原址排序算法
-- priorityQueue: 数据结构
-
-### heapSort(): O(nlogn)
-
-- input: random unsorted array of size n. A:n
-- output: 用最大堆实现原地址**升序**排序
-- 算法：
-
-```py
-def heapSort(A):
- buildMaxHeap(A)
- for i = n down to 2:
-   swap(A[1], A[i])
-   excludeFromHeap(A[i]) # 把堆顶最大的元素移到Array底并且不在之后的堆算法中使用
-   maxHeapify(Btree(1)) # 重新使堆顶元素成为剩余元素中的argMax
-```
-
-# priorityQueue
-
-队列储存一定的成员(array A of size n), 出队列时出队列的成员(pq[1])一定是数值最大的一个(argmax)
-
-- implement: max binary heap
-
-## methods:
-
-- insertOne(): 需要保证 insert 以后 pq(堆)顶的元素必须是数组中的 argmax
-- pollOne(delMax): 需要保证 poll 以后 pq(堆)顶的元素依然是数组中的 argmax
-
-### insertOne():O(logn)
-
-- input: heap A of size n, val: new node's value
-- 算法：
-
-```py
-def insertOne(A, k, val):
-  A.size = n+1
-  A[n+1] = -1
-  changeHeapValue(A, n+1, val)
-```
-
-### pollOne(aka. delMax): O(logn) => maxHeapify()
-
-- input: heap A of size n
-- output: i as argmax(A), heap A of size n-1
-  把堆顶元素 i 和堆底元素 j 对调，删除 i(出队列)并且对 BTree(j)调用 maxHeapify()
-- 算法：
-
-```py
-def pollOne(A):
-  i = A[1]
-  j = A[n]
-  swap(A[1], A[n])
-  del A[n]
-  maxHeapify(Btree(1))
-
-  return i
+```go
+heapSort(array) {
+  array = buildMaxHeap(array)
+  for i = len(array) - 1; i >= 0; i-- {
+    swap(array[0], array[i])
+    heap = array[:i]  // exclude last element from heap
+    sink(0, heap)  // sink the root (just swapped) in the shortened heap
+  }
+}
 ```
 
 # BST: binary search tree
@@ -439,7 +597,7 @@ Randomly built binary search tree does not guarantee to be balanced (ie: height 
 
 # Red-Black Tree (RBT):
 
-红黑树是改良的 binary search tree，
+红黑树是 balanced binary search tree，
 
 - 它引入了更多的数据结构规则和更复杂的插入/删除算法
 - 但是它保证了近似搜索树平衡性: aka height $h == logn$
@@ -600,5 +758,3 @@ def RBTdeletion(delNode):
         RBTdeletionFix(delNodeReplacement)
 
 ```
-
-# union-find
