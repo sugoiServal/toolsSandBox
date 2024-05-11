@@ -1,4 +1,3 @@
-- TODO: map CAPSLOCK to both ESC and CTRL(hold down). Through hardware.
 - TODO: learn vimrc: https://www.youtube.com/results?search_query=vimrc
 
 ```
@@ -8,6 +7,7 @@ j - down
 k - up
 h - left
 l - right
+w, b - word movement
 o - down append
 O - up append
 a/i - insert (append/prepend)
@@ -15,13 +15,13 @@ A/I - append/prepend to line
 gg - home
 G - end
 21gg - to 21
+ctrl-o - back to prev location
 dd, cc - d line
 D, C - d till end
 /? - search down/up
 n - next search
 . repeat oper
 caw, c5w, ci{, cf<char>, ct<char>, c/{pattern}
-w, b - word movement
 ```
 
 - .vimrc
