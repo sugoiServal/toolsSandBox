@@ -1,7 +1,21 @@
 ```bash
+# install
+tar -xzvf ideaIC-2024.1.1.tar.gz
+sudo mv idea-IC-241.15989.150 /opt/
 #.bashrc
-alias idea='/opt/idea-IC-232.10072.27/bin/idea.sh'
-alias ideacd='pwd | xargs /opt/idea-IC-232.10072.27/bin/idea.sh'
+alias idea='/opt/idea-IC-241.15989.150/bin/idea.sh'
+alias ideacd='pwd | xargs /opt/idea-IC-241.15989.150/bin/idea.sh'
+echo "alias idea='/opt/idea-IC-241.15989.150/bin/idea.sh'
+alias ideacd='pwd | xargs /opt/idea-IC-241.15989.150/bin/idea.sh'" >> .bashrc
+source .bashrc
+```
+
+```bash
+# setting sync
+sudo apt update
+sudo apt install firefox
+  # search browser, set path to the default: /usr/bin/firefox
+  # then login in browser and do setting sync
 ```
 
 - most used shortcuts: https://www.youtube.com/watch?v=QYO5_riePOQ
