@@ -21,8 +21,8 @@ sudo apt install firefox
 - most used shortcuts: https://www.youtube.com/watch?v=QYO5_riePOQ
 - debugger: https://www.youtube.com/watch?v=lAWnIP1S6UA
 
-# visibility/Navigate
 shift-esc: setting
+# visibility/Navigate
 alt-1: sidebar open/close
 ctrl-`: terminal
 alt-left/right: split/unsplit

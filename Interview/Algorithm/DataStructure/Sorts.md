@@ -185,6 +185,60 @@ public class InsertionSort {
 	}
 };
 ```
+# 选择排序 selectionSort()
+- 每轮归位一个elem。扩张sorted subarray.
+- 每轮scan unsorted， 在unsorted中寻找最小元素（从左到右），之后与unsorted[0] 交换， 并扩张sorted, shrink unsorted
+- complexity: n*(n+1)/2
+```java
+// check not null, etc
+int n = arr.length
+// expand sorted
+for (i from 0 to n-1) {
+  // find the argmin in unsorted (arr[i+1:])
+  int argmin = i; // argmin is the start of the current unsorted
+  for (j from i+1 to n-1) {
+    if (arr[j] < arr[argmin]) {
+      argmin = j;
+    } 
+  }
+  // swap j and argmin
+  int temp = arr[j];
+  arr[j] = arr[argmin];
+  arr[argmin] = temp;
+}
+```
+
+# 冒泡排序 bubbleSort() 
+- 从最大（最右）侧开始扩张 sorted subarray
+  - 有序区大小 i from 0 to n-1
+  - 无序区 idx j from 0 to n-1-i
+- 不断地遍历无序区，只要j and j+1有顺序不同，就进行交换. 一次遍历后必可以使有序区扩张1
+- 如果在一次外层循环中没有进行任何交换操作，说明数组已经是有序的，因此可以提前结束排序。
+
+```java
+// check not null, etc
+static void bubbleSort(int[] arr) {
+    if (arr == null || arr.length == 0) {
+        return;
+    }
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        boolean swapped = false;
+        for (int j = 0; j < n - 1 - i; j++) { // 使用 < n-1 是因为要access arr[j+1], 如使用 < n 会溢出
+            if (arr[j] > arr[j + 1]) {
+                // swap the two and mark swapped
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (!swapped) {
+            return;
+        }
+    }
+}
+```
 
 # heapSort()
 

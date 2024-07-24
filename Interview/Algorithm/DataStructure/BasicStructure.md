@@ -105,7 +105,7 @@ while (left < right && right < array.size()) {
 
 - sign of binary search:
 
-  - sorted array/ a monotonic function
+  - sorted array or a monotonic function
   - a clear criteria when to search in left, and when to search in right
 
 - two implementations:
@@ -205,15 +205,15 @@ func traverse(root *TreeNode) {
 
 - Binary Search Tree: for each node (recursive definition)
 
-  - left subtree of contains only nodes with values less than the node's value
-  - right subtree of contains only nodes with values greater than the node's value
+  - all nodes in the left are smaller than the root, and all nodes in the right are greater than the root
+    - left subtree contains only nodes with values less than the root's value
+    - right subtree contains only nodes with values greater than the root's value
 
 - features:
 
-  - all nodes in the left are smaller than the root, and all nodes in the right are greater than the root
-  - In a standard BST each node has `unique value` in the tree.
   - `in-order traverse` of a Binary Search Tree returns an `ordered` sequence
   - `O(logn)` best case insertion/deletion and search for a value
+  - In a standard BST each node has `unique value` in the tree.
 
 - BST extension (balanced Search trees):
 
